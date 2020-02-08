@@ -1,5 +1,5 @@
 //
-//  StringCSVParser.swift
+//  StringsCSVParser.swift
 //  SwiftyAssets
 //
 //  Created by Jean-Charles Neboit on 07/02/2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class StringCSVParser: CSVParser {
+class StringsCSVParser: CSVParser {
     private(set) var languages: [Language] = []
     private(set) var keys: [String]?
     
