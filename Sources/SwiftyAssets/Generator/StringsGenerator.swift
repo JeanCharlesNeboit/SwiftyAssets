@@ -9,12 +9,11 @@ import Foundation
 import SwiftCSV
 
 class StringsGenerator: AssetsGenerator {
-    private var csvParser: StringCSVParser?
-    
+    private var csvParser: StringsCSVParser?
     
     override init?(parser: SwiftyParser) throws {
         try super.init(parser: parser)
-        self.csvParser = try StringCSVParser(input: input, output: output)
+        self.csvParser = try StringsCSVParser(input: input, output: output)
     }
     
     override func generate() throws {

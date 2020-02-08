@@ -33,7 +33,7 @@ func main() {
             case .strings:
                 generator = try StringsGenerator(parser: swiftyParser)
             case .colors:
-                break
+                generator = try ColorsGenerator(parser: swiftyParser)
             case .images:
                 break
             case .fonts:
