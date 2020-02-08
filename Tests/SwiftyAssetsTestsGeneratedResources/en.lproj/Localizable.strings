@@ -1,0 +1,41 @@
+/*
+	Localizable.strings
+
+	Created by SwiftyAssets 🦊 on 08/02/2020
+	Translated in 🇬🇧
+	Copyright © 2020. All rights reserved.
+*/
+
+// Apple
+"theiPhone" = "The iPhone"
+"theiPad" = "The iPad"
+"iPhone" = "iPhone"
+"iPad" = "iPad"
+
+// General
+"ok" = "Ok"
+"cancel" = "Cancel"
+
+// Mail
+"noMailServiceHeader" = "No email account configured 😱"
+"noMailServiceDescription" = "Please set up an email account in the Settings app of your %@ before continuing."
+"mailReasonQuestion" = "For what reason would you like to contact us ?"
+
+// InformationViewController
+"appLegals" = "\r\n\r\n%@ v%@ 🚒\r\nMade in Auvergne 🇫🇷"
+
+// AppUpdater
+"updateAvailableHeader" = "Update available 👇"
+"updateAvailableDescription" = "A new update of the application data is available.\r\nDo not wait any longer to download it."
+"updateAvailableAction" = "Update"
+
+// UpdateView
+"updateInProgressHeader" = "Update in progress 🤞"
+"updateInProgressDescription" = "%@ is currently updating the application.\r\nPlease wait !"
+"updateFinishedHeader" = "Update completed 💪"
+"updateFinishedDescription" = "%@ has finished updating the application.\r\nNow all you have to do is enjoy !"
+"updateFinishedAction" = "Enjoy"
+"downloadingData" = "Downloading data"
+
+// AppSharing
+"appSharingMessage" = "Premiers Secours is an awesome app ! You should download it on the App Store. 📱"

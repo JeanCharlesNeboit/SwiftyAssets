@@ -1,0 +1,47 @@
+"Key / Clé","English / Anglais","Français / French"
+,en_GB,fr_FR
+"// Apple",,
+theiPhone,"The iPhone",L'iPhone
+theiPad,"The iPad",L'iPad
+iPhone,iPhone,iPhone
+iPad,iPad,iPad
+,,
+"// General",,
+ok,Ok,Ok
+cancel,Cancel,Annuler
+,,
+"// Mail",,
+noMailServiceHeader,"No email account configured 😱","Aucun compte mail configuré 😱"
+noMailServiceDescription,"Please set up an email account in the Settings app of your %@ before continuing.","Veuillez configurer un compte mail dans l'application Settings de votre %@ avant de continuer."
+mailReasonQuestion,"For what reason would you like to contact us ?","Pour quelle raison souhaitez vous nous contactez ?"
+,,
+"// InformationViewController",,
+appLegals,"
+
+%@ v%@ 🚒
+Made in Auvergne 🇫🇷","
+
+%@ v%@ 🚒
+Conçu en Auvergne 🇫🇷"
+,,
+"// AppUpdater",,
+updateAvailableHeader,"Update available 👇","Mise à jour disponible 👇"
+updateAvailableDescription,"A new update of the application data is available.
+Do not wait any longer to download it.","Une nouvelle mise à jour des données de l'application est disponible.
+N'attendez plus pour la télécharger."
+updateAvailableAction,Update,"Mettre à jour"
+,,
+"// UpdateView",,
+updateInProgressHeader,"Update in progress 🤞","Mise à jour en cours 🤞"
+updateInProgressDescription,"%@ is currently updating the application.
+Please wait !","%@ est en train de mettre à jour l'application.
+Veuillez patienter !"
+updateFinishedHeader,"Update completed 💪","Mise à jour terminée 💪"
+updateFinishedDescription,"%@ has finished updating the application.
+Now all you have to do is enjoy !","%@ a terminé de mettre à jour l'application.
+Il ne vous reste plus qu'à profiter !"
+updateFinishedAction,Enjoy,Profiter
+downloadingData,"Downloading data","Téléchargement des données"
+,,
+"// AppSharing",,
+appSharingMessage,"Premiers Secours is an awesome app ! You should download it on the App Store. 📱","Premiers Secours est une application géniale ! Vous devriez la télécharger sur l'App Store. 📱"

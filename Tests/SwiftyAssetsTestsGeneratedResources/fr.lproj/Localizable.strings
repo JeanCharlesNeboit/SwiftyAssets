@@ -1,0 +1,41 @@
+/*
+	Localizable.strings
+
+	Created by SwiftyAssets 🦊 on 08/02/2020
+	Translated in 🇫🇷
+	Copyright © 2020. All rights reserved.
+*/
+
+// Apple
+"theiPhone" = "L'iPhone"
+"theiPad" = "L'iPad"
+"iPhone" = "iPhone"
+"iPad" = "iPad"
+
+// General
+"ok" = "Ok"
+"cancel" = "Annuler"
+
+// Mail
+"noMailServiceHeader" = "Aucun compte mail configuré 😱"
+"noMailServiceDescription" = "Veuillez configurer un compte mail dans l'application Settings de votre %@ avant de continuer."
+"mailReasonQuestion" = "Pour quelle raison souhaitez vous nous contactez ?"
+
+// InformationViewController
+"appLegals" = "\r\n\r\n%@ v%@ 🚒\r\nConçu en Auvergne 🇫🇷"
+
+// AppUpdater
+"updateAvailableHeader" = "Mise à jour disponible 👇"
+"updateAvailableDescription" = "Une nouvelle mise à jour des données de l'application est disponible.\r\nN'attendez plus pour la télécharger."
+"updateAvailableAction" = "Mettre à jour"
+
+// UpdateView
+"updateInProgressHeader" = "Mise à jour en cours 🤞"
+"updateInProgressDescription" = "%@ est en train de mettre à jour l'application.\r\nVeuillez patienter !"
+"updateFinishedHeader" = "Mise à jour terminée 💪"
+"updateFinishedDescription" = "%@ a terminé de mettre à jour l'application.\r\nIl ne vous reste plus qu'à profiter !"
+"updateFinishedAction" = "Profiter"
+"downloadingData" = "Téléchargement des données"
+
+// AppSharing
+"appSharingMessage" = "Premiers Secours est une application géniale ! Vous devriez la télécharger sur l'App Store. 📱"
