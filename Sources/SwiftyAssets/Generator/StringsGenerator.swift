@@ -46,7 +46,7 @@ class StringsGenerator: AssetsGenerator {
                     var value = language.translatedStrings[i]
                     value = value.replacingOccurrences(of: "\r", with: "\\r")
                     value = value.replacingOccurrences(of: "\n", with: "\\n")
-                    lines.append("\"\(key)\" = \"\(value)\"")
+                    lines.append("\"\(key)\" = \"\(value)\";")
                 }
             }
         }
@@ -69,15 +69,17 @@ class StringsGenerator: AssetsGenerator {
         ]
         
         for key in keys {
-            if key.starts(with: "//") {
-                lines.append("\(String(repeating: "\t", count: 2))\(key)")
-            } else {
-                lines.append(contentsOf: [
-                    "\(String(repeating: "\t", count: 2))static var \(key): String {",
-                    "\(String(repeating: "\t", count: 3))return NSLocalizedString(\"\(key)\", comment: \"\")",
-                    "\(String(repeating: "\t", count: 2))}",
-                    ""
-                ])
+            if !key.isEmpty {
+                if key.starts(with: "//") {
+                    lines.append("\(String(repeating: "\t", count: 2))\(key)")
+                } else {
+                    lines.append(contentsOf: [
+                        "\(String(repeating: "\t", count: 2))static var \(key): String {",
+                        "\(String(repeating: "\t", count: 3))return NSLocalizedString(\"\(key)\", comment: \"\")",
+                        "\(String(repeating: "\t", count: 2))}",
+                        ""
+                    ])
+                }
             }
         }
         

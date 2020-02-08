@@ -9,17 +9,17 @@ import Foundation
 
 class FileHeader {
     let projectName: String?
-    let copyright: String?
+    let copyright: String
     let additionalLines: [String]?
     
-    init(projectName: String?, copyright: String?, additionalLines: [String]? = nil) {
+    init(projectName: String?, copyright: String, additionalLines: [String]? = nil) {
         self.projectName = projectName
         self.copyright = copyright
         self.additionalLines = additionalLines
     }
     
     func header(filename: String) -> String {
-        let _copyright = copyright ?? "Copyright © 2020. All rights reserved."
+        let _copyright = copyright
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
@@ -27,7 +27,7 @@ class FileHeader {
         let header = [
             "/*",
             "\t\(filename)",
-            "\(projectName?.appending("\n") ?? "")",
+            "\t\(projectName?.appending("\n") ?? "")",
             "\tCreated by \(Spec.projectName) 🦊 on \(dateFormatter.string(from: Date()))",
             "\t\(additionalLines?.joined(separator: "\n").appending("\n\t") ?? "")\(_copyright)",
             "*/"

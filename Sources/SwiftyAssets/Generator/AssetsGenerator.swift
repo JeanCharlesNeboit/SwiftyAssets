@@ -24,17 +24,14 @@ class AssetsGenerator {
             return nil
         }
 
-        var isDir : ObjCBool = false
-        guard FileManager.default.fileExists(atPath: outputArg, isDirectory: &isDir) else {
-            throw PositionalError.outputNotADirectory(path: outputArg)
+        var isDir : ObjCBool = true
+        if !FileManager.default.fileExists(atPath: outputArg, isDirectory: &isDir) {
+            try FileManager.default.createDirectory(atPath: outputArg, withIntermediateDirectories: true, attributes: nil)
         }
         
         self.swiftyParser = parser
         self.input = inputArg
         self.output = outputArg
-        
-        //        let projectName = 
-        //        let copyright = v
     }
     
     func getFileHeader(additionalLines: [String]? = nil) -> FileHeader {

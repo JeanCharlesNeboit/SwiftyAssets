@@ -49,7 +49,6 @@ func main() {
             print("\(error.localizedDescription)\n")
         }
         print("Use --help to see how \(Spec.projectName) works")
-        //swiftyParser.argumentParser.printUsage(on: stdoutStream)
     }
 }
 

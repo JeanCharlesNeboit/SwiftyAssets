@@ -31,10 +31,14 @@ class ColorsGenerator: AssetsGenerator {
         }
         
         for color in colors {
-            let colorFolder = "\(xcassetsPath)/\(color.name)\(Extension.colorset.rawValue)"
-            try FileManager.default.createDirectory(atPath: colorFolder, withIntermediateDirectories: true, attributes: nil)
-            try createColor(for: color, in: colorFolder)
+            if !color.name.isEmpty && !color.name.starts(with: "//") {
+                let colorFolder = "\(xcassetsPath)/\(color.name)\(Extension.colorset.rawValue)"
+                try FileManager.default.createDirectory(atPath: colorFolder, withIntermediateDirectories: true, attributes: nil)
+                try self.createColor(for: color, in: colorFolder)
+            }
         }
+        
+        try self.createSwiftFile(colors: colors)
     }
     
     private func createColor(for color: Color, in folder: String) throws {
@@ -52,7 +56,40 @@ class ColorsGenerator: AssetsGenerator {
         try fileGenerator.generate(atPath: folder)
     }
     
-    private func createSwiftFile(keys: [String]) throws {
+    private func createSwiftFile(colors: [Color]) throws {
+        let filename = "SwiftyColors"
+        let path = "\(output)"
         
+        var lines = [
+            "",
+            "import Foundation",
+            "import UIKit",
+            "",
+            "extension \(Spec.projectName) {",
+            "\tclass Colors {"
+        ]
+        
+        for color in colors {
+            if !color.name.isEmpty {
+                if color.name.starts(with: "//") {
+                    lines.append("\(String(repeating: "\t", count: 2))\(color.name)")
+                } else {
+                    lines.append(contentsOf: [
+                        "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor? {",
+                        "\(String(repeating: "\t", count: 3))return UIColor(named: \"\(color.name)\")",
+                        "\(String(repeating: "\t", count: 2))}",
+                        ""
+                    ])
+                }
+            }
+        }
+        
+        lines.append(contentsOf: [
+            "\t}",
+            "}"
+        ])
+        
+        let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
+        try fileGenerator.generate(atPath: path)
     }
 }

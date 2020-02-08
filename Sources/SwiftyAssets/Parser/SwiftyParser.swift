@@ -22,11 +22,18 @@ class SwiftyParser {
     }
     
     var projectName: String? {
-        return get(option: .projectName)?.appending("\n")
+        return get(option: .projectName)
     }
     
-    var copyright: String? {
-        return get(option: .copyright)
+    var copyright: String {
+        var defaultCopyright = "Copyright © 2020"
+        
+        if let projectName = self.projectName {
+            defaultCopyright.append(contentsOf: ", \(projectName)")
+        }
+        defaultCopyright.append(contentsOf: ". All rights reserved.")
+        
+        return get(option: .copyright) ?? defaultCopyright
     }
     
     private func get(option: Option) -> String? {
