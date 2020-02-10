@@ -62,7 +62,6 @@ class ColorsGenerator: AssetsGenerator {
         
         var lines = [
             "",
-            "import Foundation",
             "import UIKit",
             "",
             "extension \(Spec.projectName) {",
@@ -72,7 +71,7 @@ class ColorsGenerator: AssetsGenerator {
         for color in colors {
             if !color.name.isEmpty {
                 if color.name.starts(with: "//") {
-                    lines.append("\(String(repeating: "\t", count: 2))\(color.name)")
+                    lines.append("\(String(repeating: "\t", count: 2))\(color.name.replacingOccurrences(of: "//", with: "// MARK: -"))")
                 } else {
                     lines.append(contentsOf: [
                         "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor? {",

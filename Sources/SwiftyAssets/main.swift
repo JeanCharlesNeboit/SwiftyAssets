@@ -37,7 +37,7 @@ func main() {
             case .images:
                 break
             case .fonts:
-                break
+                generator = try FontsGenerator(parser: swiftyParser)
             }
             
             try generator?.generate()

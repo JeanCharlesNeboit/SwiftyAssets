@@ -62,7 +62,6 @@ class StringsGenerator: AssetsGenerator {
         var lines = [
             "",
             "import Foundation",
-            "import UIKit",
             "",
             "extension \(Spec.projectName) {",
             "\tclass Strings {"
@@ -71,7 +70,7 @@ class StringsGenerator: AssetsGenerator {
         for key in keys {
             if !key.isEmpty {
                 if key.starts(with: "//") {
-                    lines.append("\(String(repeating: "\t", count: 2))\(key)")
+                    lines.append("\(String(repeating: "\t", count: 2))\(key.replacingOccurrences(of: "//", with: "// MARK: -"))")
                 } else {
                     lines.append(contentsOf: [
                         "\(String(repeating: "\t", count: 2))static var \(key): String {",
