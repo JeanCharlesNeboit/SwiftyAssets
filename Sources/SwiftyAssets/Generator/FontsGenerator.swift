@@ -6,17 +6,24 @@
 //
 
 import Foundation
+import SPMUtility
 
 class FontsGenerator: AssetsGenerator {
     typealias FontFamily = String
     
     private var fontsGroupedByFamily: [FontFamily: [Font]] = [:]
+    private var plist: String?
     
-    override init?(parser: SwiftyParser) throws {
-        try super.init(parser: parser)
+    init?(result: ArgumentParser.Result, command: FontsCommand) throws {
+        try super.init(result: result, assetsCommand: command)
+        
+        plist = command.plist(in: result)
         
         try parseFonts()
         try createSwiftFile(fonts: fontsGroupedByFamily)
+        try addFontsToPList(fonts: fontsGroupedByFamily.flatMap({ dict in
+            return dict.value
+        }))
     }
     
     private func parseFonts() throws {
@@ -27,7 +34,7 @@ class FontsGenerator: AssetsGenerator {
             }) {
 
             var fonts: [Font] = []
-            for case let fileURL as URL in enumerator {
+            for case let fileURL as Foundation.URL in enumerator {
                 if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileURL.pathExtension as CFString, nil) {
                     if UTTypeConformsTo(uti.takeRetainedValue(), kUTTypeFont) {
                         fonts.append(contentsOf: CTFont.parse(url: fileURL))
@@ -74,5 +81,9 @@ class FontsGenerator: AssetsGenerator {
         
         let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
         try fileGenerator.generate(atPath: path)
+    }
+    
+    private func addFontsToPList(fonts: [Font]) throws {
+        fonts.forEach({print($0.fileName)})
     }
 }

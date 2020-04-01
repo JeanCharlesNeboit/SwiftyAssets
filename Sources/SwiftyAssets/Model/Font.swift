@@ -8,6 +8,7 @@
 import Foundation
 
 struct Font {
+    let fileName: String
     let family: String
     let postScriptName: String
     let style: String

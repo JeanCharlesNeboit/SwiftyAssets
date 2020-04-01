@@ -6,15 +6,14 @@
 //
 
 import Foundation
+import SPMUtility
 
 class ColorsGenerator: AssetsGenerator {
     private var csvParser: ColorsCSVParser?
     
-    override init?(parser: SwiftyParser) throws {
-        try super.init(parser: parser)
+    init?(result: ArgumentParser.Result, command: ColorsCommand) throws {
+        try super.init(result: result, assetsCommand: command)
         self.csvParser = try ColorsCSVParser(input: input, output: output)
-        
-        
     }
     
     override func generate() throws {
@@ -74,8 +73,8 @@ class ColorsGenerator: AssetsGenerator {
                     lines.append("\(String(repeating: "\t", count: 2))\(color.name.replacingOccurrences(of: "//", with: "// MARK: -"))")
                 } else {
                     lines.append(contentsOf: [
-                        "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor? {",
-                        "\(String(repeating: "\t", count: 3))return UIColor(named: \"\(color.name)\")",
+                        "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor {",
+                        "\(String(repeating: "\t", count: 3))return UIColor(named: \"\(color.name)\")!",
                         "\(String(repeating: "\t", count: 2))}",
                         ""
                     ])

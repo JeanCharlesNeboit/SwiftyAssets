@@ -1,5 +1,5 @@
 //
-//  Option.swift
+//  Options.swift
 //  SwiftyAssets
 //
 //  Created by Jean-Charles Neboit on 06/02/2020.
@@ -16,15 +16,16 @@ protocol ArgumentProtocol {
     var completion: ShellCompletion { get }
 }
 
-enum Option: String, CaseIterable, ArgumentProtocol {
+enum Options: String, CaseIterable, ArgumentProtocol {
     typealias T = String
     
     case projectName = "--project-name"
     case copyright = "--copyright"
     case version = "--version"
+    case plist = "--plist"
     
     init?(shortName: String) {
-        for option in Option.allCases {
+        for option in Options.allCases {
             if option.shortName == shortName {
                 self = option
                 return
@@ -41,6 +42,8 @@ enum Option: String, CaseIterable, ArgumentProtocol {
             return "-c"
         case .version:
             return "-v"
+        case .plist:
+            return "-p"
         }
     }
     
@@ -51,7 +54,9 @@ enum Option: String, CaseIterable, ArgumentProtocol {
         case .copyright:
             return "Copyright of the project"
         case .version:
-            return "Current version of \(Spec.projectName)"
+            return "Display the using version of \(Spec.projectName)"
+        case .plist:
+            return "Path of your project's Info.plist"
         }
     }
     
@@ -62,33 +67,11 @@ enum Option: String, CaseIterable, ArgumentProtocol {
     var completion: ShellCompletion {
         return .unspecified
     }
-    
-    var withAction: Bool {
-        switch self {
-        case .version:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    func action() {
-        switch self {
-        case .version:
-            print("\(Spec.projectName) \(Spec.version)")
-            exit(0)
-        default:
-            break
-        }
-    }
 }
 
 extension ArgumentParser {
-    func addOptions() -> [Option: OptionArgument<String>] {
-        var options = [Option: OptionArgument<String>]()
-        for option in Option.allCases {
-            options[option] = self.add(option: option.rawValue, shortName: option.shortName, kind: option.kind, usage: option.usage, completion: option.completion)
-        }
-        return options
+    @discardableResult
+    func addOption(option: Options) -> OptionArgument<String> {
+        return self.add(option: option.rawValue, shortName: option.shortName, kind: option.kind, usage: option.usage, completion: option.completion)
     }
 }

@@ -9,18 +9,17 @@ import Foundation
 import SPMUtility
 
 class AssetsGenerator {
-    let swiftyParser: SwiftyParser
+    let command: AssetsCommand
+    let result: ArgumentParser.Result
     let input: String
     let output: String
     
-    init?(parser: SwiftyParser) throws {
-        guard let inputPositional = parser.positionals[Positional.input],
-            let inputArg = parser.result.get(inputPositional) else {
+    init?(result: ArgumentParser.Result, assetsCommand: AssetsCommand) throws {
+        guard let inputArg = result.get(assetsCommand.inputPositional) else {
             return nil
         }
 
-        guard let outputPositional = parser.positionals[Positional.output],
-            let outputArg = parser.result.get(outputPositional) else {
+        guard let outputArg = result.get(assetsCommand.outputPositional) else {
             return nil
         }
 
@@ -29,13 +28,16 @@ class AssetsGenerator {
             try FileManager.default.createDirectory(atPath: outputArg, withIntermediateDirectories: true, attributes: nil)
         }
         
-        self.swiftyParser = parser
+        self.command = assetsCommand
+        self.result = result
         self.input = inputArg
         self.output = outputArg
     }
     
     func getFileHeader(additionalLines: [String]? = nil) -> FileHeader {
-        return FileHeader(projectName: swiftyParser.projectName, copyright: swiftyParser.copyright, additionalLines: additionalLines)
+        let projectName = command.projectName(in: result)
+        let copyright = command.copyright(in: result)
+        return FileHeader(projectName: projectName, copyright: copyright, additionalLines: additionalLines)
     }
     
     public func createAssetsClassFile() throws {

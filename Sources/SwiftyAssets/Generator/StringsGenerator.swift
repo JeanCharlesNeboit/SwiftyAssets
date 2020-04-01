@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import SPMUtility
 import SwiftCSV
 
 class StringsGenerator: AssetsGenerator {
     private var csvParser: StringsCSVParser?
     
-    override init?(parser: SwiftyParser) throws {
-        try super.init(parser: parser)
+    init?(result: ArgumentParser.Result, command: StringsCommand) throws {
+        try super.init(result: result, assetsCommand: command)
         self.csvParser = try StringsCSVParser(input: input, output: output)
     }
     
