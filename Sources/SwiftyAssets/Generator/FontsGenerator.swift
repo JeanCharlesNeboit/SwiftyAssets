@@ -12,12 +12,12 @@ class FontsGenerator: AssetsGenerator {
     typealias FontFamily = String
     
     private var fontsGroupedByFamily: [FontFamily: [Font]] = [:]
-    private var plist: String?
+    private var plistPath: String?
     
     init?(result: ArgumentParser.Result, command: FontsCommand) throws {
         try super.init(result: result, assetsCommand: command)
         
-        plist = command.plist(in: result)
+        plistPath = command.plist(in: result)
         
         try parseFonts()
         try createSwiftFile(fonts: fontsGroupedByFamily)
@@ -84,6 +84,22 @@ class FontsGenerator: AssetsGenerator {
     }
     
     private func addFontsToPList(fonts: [Font]) throws {
-        fonts.forEach({print($0.fileName)})
+        guard let path = plistPath else { return }
+        
+        let plistService = PlistService(path: path)
+        
+        guard var dictionary = plistService.read() else {
+            return
+        }
+        
+        var fontsProvidedByApp = dictionary[PlistService.FontsProvidedByAppKey] as? [String] ?? [String]()
+        
+        fonts.forEach { font in
+            fontsProvidedByApp.append(font.fileName)
+        }
+        
+        dictionary[PlistService.FontsProvidedByAppKey] = fontsProvidedByApp
+        
+        try plistService.write(dict: dictionary)
     }
 }

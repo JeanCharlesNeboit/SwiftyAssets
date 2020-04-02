@@ -7,6 +7,10 @@
 
 import Foundation
 
+class Plist {
+    var content: [String: Any] = [:]
+}
+
 class PlistService {
     // MARK: - Static Properties
     static let FontsProvidedByAppKey = "Fonts provided by application"
@@ -30,15 +34,12 @@ class PlistService {
         return nil
     }
     
-    func write(dict: [String: Any]) {
-        let encoder = PropertyListEncoder()
-        encoder.outputFormat = .xml
-
-        do {
-            let data = try encoder.encode(dict)
-            try data.write(to: path)
-        } catch {
-            print(error)
+    func write(dict: [String: Any]) throws {
+        guard let url = URL(string: "file://\(path)") else {
+            return
         }
+            
+        let plistData = try PropertyListSerialization.data(fromPropertyList: dict, format: .xml, options: 0)
+        try plistData.write(to: url)
     }
 }
