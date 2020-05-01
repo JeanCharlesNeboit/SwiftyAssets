@@ -18,10 +18,10 @@ class ColorsGenerator: AssetsGenerator {
     
     override func generate() throws {
         try super.generate()
-        try createColorsXCAssets()
+        try generateColors()
     }
     
-    private func createColorsXCAssets() throws {
+    private func generateColors() throws {
         let xcassetsPath = "\(output)/\(Spec.projectName)\(Extension.xcassets.rawValue)/Colors"
         
         guard let colors = csvParser?.colors else {
@@ -29,20 +29,20 @@ class ColorsGenerator: AssetsGenerator {
         }
         
         for color in colors {
-            if !color.name.isEmpty && !color.name.starts(with: "//") {
-                let colorFolder = "\(xcassetsPath)/\(color.name)\(Extension.colorset.rawValue)"
-                try FileManager.default.createDirectory(atPath: colorFolder, withIntermediateDirectories: true, attributes: nil)
-                try self.createColor(for: color, in: colorFolder)
-            }
+            guard !color.name.isEmpty && !color.name.starts(with: "//") else { return }
+            
+            let colorsetFolder = "\(xcassetsPath)/\(color.name)\(Extension.colorset.rawValue)"
+            try FileManager.default.createDirectory(atPath: colorsetFolder, withIntermediateDirectories: true, attributes: nil)
+            try self.generateColorset(for: color, in: colorsetFolder)
         }
         
-        try self.createSwiftFile(colors: colors)
+        try self.generateSwiftFile(colors: colors)
     }
     
-    private func createColor(for color: Color, in folder: String) throws {
+    private func generateColorset(for color: Color, in folder: String) throws {
         let filename = "Contents"
 
-        var info = ColorSet.info
+        var info = AssetsSet.info
         info.appendToLast(newElement: ",")
         
         var lines = ["{"]
@@ -54,9 +54,8 @@ class ColorsGenerator: AssetsGenerator {
         try fileGenerator.generate(atPath: folder)
     }
     
-    private func createSwiftFile(colors: [Color]) throws {
+    private func generateSwiftFile(colors: [Color]) throws {
         let filename = "SwiftyColors"
-        let path = "\(output)"
         
         var lines = [
             "",
@@ -67,17 +66,17 @@ class ColorsGenerator: AssetsGenerator {
         ]
         
         for color in colors {
-            if !color.name.isEmpty {
-                if color.name.starts(with: "//") {
-                    lines.append("\(String(repeating: "\t", count: 2))\(color.name.replacingOccurrences(of: "//", with: "// MARK: -"))")
-                } else {
-                    lines.append(contentsOf: [
-                        "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor {",
-                        "\(String(repeating: "\t", count: 3))return UIColor(named: \"\(color.name)\")!",
-                        "\(String(repeating: "\t", count: 2))}",
-                        ""
-                    ])
-                }
+            guard !color.name.isEmpty else { return }
+            
+            if color.name.starts(with: "//") {
+                lines.append("\(String(repeating: "\t", count: 2))\(color.name.replacingOccurrences(of: "//", with: "// MARK: -"))")
+            } else {
+                lines.append(contentsOf: [
+                    "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor {",
+                    "\(String(repeating: "\t", count: 3))return UIColor(named: \"\(color.name)\")!",
+                    "\(String(repeating: "\t", count: 2))}",
+                    ""
+                ])
             }
         }
         
@@ -87,6 +86,6 @@ class ColorsGenerator: AssetsGenerator {
         ])
         
         let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
-        try fileGenerator.generate(atPath: path)
+        try fileGenerator.generate(atPath: output)
     }
 }

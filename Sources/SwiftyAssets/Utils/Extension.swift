@@ -14,15 +14,15 @@ enum Extension: String {
     case json = ".json"
     case lproj = ".lproj"
     case colorset = ".colorset"
+    case imageset = ".imageset"
 }
 
-
-struct ColorSet {
+struct AssetsSet {
     static var info: [String] {
         return [
             "\(String(repeating: "\t", count: 1))\"info\" : {",
-            "\(String(repeating: "\t", count: 2))\"version\" : 1,",
-            "\(String(repeating: "\t", count: 2))\"author\" : \"xcode\"",
+            "\(String(repeating: "\t", count: 2))\"author\" : \"xcode\",",
+            "\(String(repeating: "\t", count: 2))\"version\" : 1",
             "\(String(repeating: "\t", count: 1))}"
         ]
     }
