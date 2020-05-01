@@ -29,7 +29,7 @@ class FontsGenerator: AssetsGenerator {
     private func parseFonts() throws {
         if let inputURL = URL(string: input),
             let enumerator = FileManager.default.enumerator(at: inputURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
-                print("directoryEnumerator error at \(url): ", error)
+                print("DirectoryEnumerator error at \(url): ", error)
                 return true
             }) {
 

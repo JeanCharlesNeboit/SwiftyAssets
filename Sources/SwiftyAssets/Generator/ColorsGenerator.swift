@@ -18,7 +18,6 @@ class ColorsGenerator: AssetsGenerator {
     
     override func generate() throws {
         try super.generate()
-        
         try createColorsXCAssets()
     }
     

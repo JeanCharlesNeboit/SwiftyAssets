@@ -33,9 +33,7 @@ class FontsCommand: AssetsCommand, Command {
 // MARK: - ArgumentParser.Result
 extension FontsCommand {
     func plist(in result: ArgumentParser.Result) -> String? {
-        guard let plist = plistOption else {
-            return nil
-        }
+        guard let plist = plistOption else { return nil }
         return result.get(plist)
     }
 }

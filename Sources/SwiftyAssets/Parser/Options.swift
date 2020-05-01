@@ -23,6 +23,7 @@ enum Options: String, CaseIterable, ArgumentProtocol {
     case copyright = "--copyright"
     case version = "--version"
     case plist = "--plist"
+    case resources = "--resources"
     
     init?(shortName: String) {
         for option in Options.allCases {
@@ -44,6 +45,8 @@ enum Options: String, CaseIterable, ArgumentProtocol {
             return "-v"
         case .plist:
             return "-p"
+        case .resources:
+            return "-r"
         }
     }
     
@@ -57,6 +60,8 @@ enum Options: String, CaseIterable, ArgumentProtocol {
             return "Display the using version of \(Spec.projectName)"
         case .plist:
             return "Path of your project's Info.plist"
+        case .resources:
+            return "Path of the resources"
         }
     }
     
