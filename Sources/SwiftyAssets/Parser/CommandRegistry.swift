@@ -41,7 +41,7 @@ struct CommandRegistry {
         if arguments.count == 1, let first = arguments.first {
             let version = Options.version
             if first == version.rawValue || first == version.shortName {
-                print("\(Spec.projectName) \(Spec.version)")
+                print(VersionCommand().appVersion)
                 exit(0)
             }
         }

@@ -8,7 +8,8 @@
 import XCTest
 import class Foundation.Bundle
 
-final class StringsCommandTests: XCTestCase {
+final class StringsCommandTests: SwiftyAssetsTests {
     func testHelpCommand() throws {
+        
     }
 }
