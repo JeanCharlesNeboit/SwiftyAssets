@@ -8,15 +8,15 @@
 import Foundation
 import SPMUtility
 
-class ColorsCommand: AssetsCommand, Command {
-    let command: String = "colors"
-    let overview: String = "Generate Named Colors"
+public class ColorsCommand: AssetsCommand, Command {
+    public let command: String = "colors"
+    public let overview: String = "Generate Named Colors"
     
-    required init(parser: ArgumentParser) {
+    public required init(parser: ArgumentParser) {
         super.init(parser: parser, command: command, overview: overview)
     }
     
-    func run(with result: ArgumentParser.Result) throws {
+    public func run(with result: ArgumentParser.Result) throws {
         let generator = try ColorsGenerator(result: result, command: self)
         try generator?.generate()
     }

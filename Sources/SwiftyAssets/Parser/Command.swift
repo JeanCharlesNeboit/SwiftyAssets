@@ -8,7 +8,7 @@
 import Foundation
 import SPMUtility
 
-protocol Command {
+public protocol Command {
     var command: String { get }
     var overview: String { get }
 

@@ -11,8 +11,8 @@ class StringsCSVParser: CSVParser {
     private(set) var languages: [Language] = []
     private(set) var keys: [String]?
     
-    override init(input: String, output: String) throws {
-        try super.init(input: input, output: output)
+    override init(path: String) throws {
+        try super.init(path: path)
         
         let locales = Array(csv.enumeratedRows[0].dropFirst())
         for locale in locales {

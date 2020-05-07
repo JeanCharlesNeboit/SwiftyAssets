@@ -11,7 +11,7 @@ import SwiftCSV
 class CSVParser {
     let csv: CSV
     
-    init(input: String, output: String) throws {
-        self.csv = try CSV(url: URL(fileURLWithPath: input))
+    init(path: String) throws {
+        self.csv = try CSV(url: URL(fileURLWithPath: path))
     }
 }

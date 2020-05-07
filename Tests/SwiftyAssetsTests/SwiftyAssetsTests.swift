@@ -1,16 +1,37 @@
-import XCTest
-import class Foundation.Bundle
+//
+//  SwiftyAssetsTests.swift
+//  SwiftyAssets
+//
+//  Created by Jean-Charles Neboit on 02/05/2020.
+//
 
-class SwiftyAssetsTests: XCTestCase {
-    /// Returns path to the built products directory.
-    var productsDirectory: URL {
-      #if os(macOS)
-        for bundle in Bundle.allBundles where bundle.bundlePath.hasSuffix(".xctest") {
-            return bundle.bundleURL.deletingLastPathComponent()
-        }
-        fatalError("couldn't find the products directory")
-      #else
-        return Bundle.main.bundleURL
-      #endif
+import XCTest
+@testable import SwiftyAssets
+
+final class SwiftyAssetsTests: AbstractXCTestCase {
+    // MARK: - SwiftyAssets --version
+    func testVersionCommand() throws {
+        let binary = productsDirectory.appendingPathComponent("SwiftyAssets")
+        
+        let process = Process()
+        process.executableURL = binary
+        process.arguments = ["--version"]
+        
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        
+        try process.run()
+        process.waitUntilExit()
+        
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)?.trimmingCharacters(in: .newlines)
+        
+        XCTAssertEqual(output, VersionCommand().appVersion)
     }
+    
+    static var allTests = [
+        ("testVersionCommand", testVersionCommand),
+    ]
 }
+
+

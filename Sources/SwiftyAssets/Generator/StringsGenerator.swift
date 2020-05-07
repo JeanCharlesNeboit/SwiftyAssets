@@ -14,7 +14,7 @@ class StringsGenerator: AssetsGenerator {
     
     init?(result: ArgumentParser.Result, command: StringsCommand) throws {
         try super.init(result: result, assetsCommand: command)
-        self.csvParser = try StringsCSVParser(input: input, output: output)
+        self.csvParser = try StringsCSVParser(path: input)
     }
     
     override func generate() throws {

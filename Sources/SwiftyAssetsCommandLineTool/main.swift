@@ -1,6 +1,7 @@
 import Foundation
 import Basic
 import SPMUtility
+import SwiftyAssets
 
 func main() {        
     var registry = CommandRegistry(usage: "[--version] [--help] <command> <options>", overview: Spec.overview)

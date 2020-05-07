@@ -16,8 +16,8 @@ fileprivate enum ImageHeader: String {
 class ImagesCSVParser: CSVParser {
     private(set) var images: [Image] = []
     
-    override init(input: String, output: String) throws {
-        try super.init(input: input, output: output)
+    override init(path: String) throws {
+        try super.init(path: path)
         
         for namedRow in csv.namedRows {
             if let name = namedRow[ImageHeader.name.rawValue],

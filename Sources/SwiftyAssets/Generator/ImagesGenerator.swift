@@ -18,7 +18,7 @@ class ImagesGenerator: AssetsGenerator {
     init?(result: ArgumentParser.Result, command: ImagesCommand) throws {
         try super.init(result: result, assetsCommand: command)
         
-        self.csvParser = try ImagesCSVParser(input: input, output: output)
+        self.csvParser = try ImagesCSVParser(path: input)
         imagesFolderPath = command.imagesFolderPath(in: result)
     }
     

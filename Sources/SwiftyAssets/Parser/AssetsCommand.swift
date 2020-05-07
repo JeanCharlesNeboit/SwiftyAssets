@@ -8,7 +8,7 @@
 import Foundation
 import SPMUtility
 
-class AssetsCommand {
+public class AssetsCommand {
     let subparser: ArgumentParser
     let inputPositional: PositionalArgument<String>
     let outputPositional: PositionalArgument<String>
@@ -20,7 +20,7 @@ class AssetsCommand {
         subparser = parser.add(subparser: command, overview: overview)
         
         let input = Positional.input(command)
-        inputPositional = subparser.add(positional: input.value, kind: String.self, usage: input.value)
+        inputPositional = subparser.add(positional: input.value, kind: String.self, usage: input.usage)
         
         let output = Positional.output(command)
         outputPositional = subparser.add(positional: output.value, kind: String.self, usage: output.usage)

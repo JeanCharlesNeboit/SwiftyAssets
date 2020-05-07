@@ -9,20 +9,20 @@ import Foundation
 import SPMUtility
 import Basic
 
-struct CommandRegistry {
+public struct CommandRegistry {
     private let parser: ArgumentParser
     private var commands: [Command] = []
 
-    init(usage: String, overview: String) {
+    public init(usage: String, overview: String) {
         parser = ArgumentParser(usage: usage, overview: overview)
         parser.addOption(option: .version)
     }
 
-    mutating func register(command: Command.Type) {
+    public mutating func register(command: Command.Type) {
         commands.append(command.init(parser: parser))
     }
 
-    func run() {
+    public func run() {
         do {
             let parsedArguments = try parse()
             try process(arguments: parsedArguments)

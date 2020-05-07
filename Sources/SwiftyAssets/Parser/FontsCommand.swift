@@ -9,22 +9,22 @@ import Foundation
 import SPMUtility
 
 // MARK: - Command
-class FontsCommand: AssetsCommand, Command {
+public class FontsCommand: AssetsCommand, Command {
     // MARK: - Properties
-    let command: String = "fonts"
-    let overview: String = "Generate Fonts"
+    public let command: String = "fonts"
+    public let overview: String = "Generate Fonts"
     
     // MARK: - Options
-    var plistOption: OptionArgument<String>?
+    public var plistOption: OptionArgument<String>?
     
     // MARK: - Initialization
-    required init(parser: ArgumentParser) {
+    public required init(parser: ArgumentParser) {
         super.init(parser: parser, command: command, overview: overview)
         plistOption = subparser.addOption(option: .plist)
     }
     
     // MARK: - Run
-    func run(with result: ArgumentParser.Result) throws {
+    public func run(with result: ArgumentParser.Result) throws {
         let generator = try FontsGenerator(result: result, command: self)
         try generator?.generate()
     }

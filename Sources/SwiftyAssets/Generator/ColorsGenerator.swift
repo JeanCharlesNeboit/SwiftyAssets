@@ -13,7 +13,7 @@ class ColorsGenerator: AssetsGenerator {
     
     init?(result: ArgumentParser.Result, command: ColorsCommand) throws {
         try super.init(result: result, assetsCommand: command)
-        self.csvParser = try ColorsCSVParser(input: input, output: output)
+        self.csvParser = try ColorsCSVParser(path: input)
     }
     
     override func generate() throws {

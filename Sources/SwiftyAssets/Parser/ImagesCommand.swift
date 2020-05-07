@@ -8,22 +8,22 @@
 import Foundation
 import SPMUtility
 
-class ImagesCommand: AssetsCommand, Command {
+public class ImagesCommand: AssetsCommand, Command {
     // MARK: - Properties
-    let command: String = "images"
-    let overview: String = "Generate Images"
+    public let command: String = "images"
+    public let overview: String = "Generate Images"
     
     // MARK: - Options
     private var imagesFolderPathOption: OptionArgument<String>?
     
     // MARK: - Initialization
-    required init(parser: ArgumentParser) {
+    public required init(parser: ArgumentParser) {
         super.init(parser: parser, command: command, overview: overview)
         imagesFolderPathOption = subparser.addOption(option: .resources)
     }
     
     // MARK: - Run
-    func run(with result: ArgumentParser.Result) throws {
+    public func run(with result: ArgumentParser.Result) throws {
         let generator = try ImagesGenerator(result: result, command: self)
         try generator?.generate()
     }
