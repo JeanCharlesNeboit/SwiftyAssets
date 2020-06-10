@@ -4,7 +4,7 @@ import SPMUtility
 import SwiftyAssets
 
 func main() {        
-    var registry = CommandRegistry(usage: "[--version] [--help] <command> <options>", overview: Spec.overview)
+    var registry = CommandRegistry(usage: CommandLineTool.usage, overview: CommandLineTool.overview)
 
     registry.register(command: StringsCommand.self)
     registry.register(command: ColorsCommand.self)

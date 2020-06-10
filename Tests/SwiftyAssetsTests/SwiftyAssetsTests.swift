@@ -11,7 +11,7 @@ import XCTest
 final class SwiftyAssetsTests: AbstractXCTestCase {
     // MARK: - SwiftyAssets --version
     func testVersionCommand() throws {
-        let binary = productsDirectory.appendingPathComponent("SwiftyAssets")
+        let binary = productsDirectory.appendingPathComponent("SwiftyAssetsCommandLineTool")
         
         let process = Process()
         process.executableURL = binary

@@ -1,5 +1,5 @@
 //
-//  Color.swift
+//  ColorSet.swift
 //  SwiftyAssets
 //
 //  Created by Jean-Charles Neboit on 08/02/2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Color {
+struct ColorSet {
     let name: String
     let lightHex: String
     let darkHex: String?

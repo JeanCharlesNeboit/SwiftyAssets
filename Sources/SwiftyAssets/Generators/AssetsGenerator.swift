@@ -41,7 +41,7 @@ class AssetsGenerator {
     }
     
     public func createAssetsClassFile() throws {
-        let filename = "\(Spec.projectName)"
+        let filename = "\(CommandLineTool.name)"
         let path = "\(output)"
         
         let lines = [

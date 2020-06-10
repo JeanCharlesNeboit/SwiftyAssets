@@ -64,7 +64,7 @@ class StringsGenerator: AssetsGenerator {
             "",
             "import Foundation",
             "",
-            "extension \(Spec.projectName) {",
+            "extension \(CommandLineTool.name) {",
             "\tclass Strings {"
         ]
         

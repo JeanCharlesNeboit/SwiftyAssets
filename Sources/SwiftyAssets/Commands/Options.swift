@@ -57,7 +57,7 @@ enum Options: String, CaseIterable, ArgumentProtocol {
         case .copyright:
             return "Copyright of the project"
         case .version:
-            return "Display the current version of \(Spec.projectName)"
+            return "Display the current version of \(CommandLineTool.name)"
         case .plist:
             return "Path of your project's Info.plist"
         case .resources:

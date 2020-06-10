@@ -54,7 +54,7 @@ class ImagesGenerator: AssetsGenerator {
     }
     
     private func generateImages() throws {
-        let xcassetsPath = "\(output)/\(Spec.projectName)\(Extension.xcassets.rawValue)/Images"
+        let xcassetsPath = "\(output)/\(CommandLineTool.name)\(Extension.xcassets.rawValue)/Images"
         
         guard let images = csvParser?.images else { return }
         
@@ -145,7 +145,7 @@ class ImagesGenerator: AssetsGenerator {
             "",
             "import UIKit",
             "",
-            "extension \(Spec.projectName) {",
+            "extension \(CommandLineTool.name) {",
             "\tclass Images {"
         ]
         

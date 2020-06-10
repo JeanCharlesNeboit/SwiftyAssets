@@ -9,6 +9,6 @@ import Foundation
 
 class VersionCommand {
     var appVersion: String {
-        "\(Spec.projectName) \(Spec.version)"
+        "\(CommandLineTool.name) \(CommandLineTool.version)"
     }
 }

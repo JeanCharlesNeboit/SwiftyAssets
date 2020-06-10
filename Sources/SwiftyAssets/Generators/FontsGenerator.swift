@@ -54,7 +54,7 @@ class FontsGenerator: AssetsGenerator {
             "",
             "import UIKit",
             "",
-            "extension \(Spec.projectName) {",
+            "extension \(CommandLineTool.name) {",
             "\tclass Font {"
         ]
         

@@ -22,7 +22,7 @@ class ColorsGenerator: AssetsGenerator {
     }
     
     private func generateColors() throws {
-        let xcassetsPath = "\(output)/\(Spec.projectName)\(Extension.xcassets.rawValue)/Colors"
+        let xcassetsPath = "\(output)/\(CommandLineTool.name)\(Extension.xcassets.rawValue)/Colors"
         
         guard let colors = csvParser?.colors else {
             return
@@ -39,7 +39,7 @@ class ColorsGenerator: AssetsGenerator {
         try self.generateSwiftFile(colors: colors)
     }
     
-    private func generateColorset(for color: Color, in folder: String) throws {
+    private func generateColorset(for color: ColorSet, in folder: String) throws {
         let filename = "Contents"
 
         var info = AssetsSet.info
@@ -54,14 +54,14 @@ class ColorsGenerator: AssetsGenerator {
         try fileGenerator.generate(atPath: folder)
     }
     
-    private func generateSwiftFile(colors: [Color]) throws {
+    private func generateSwiftFile(colors: [ColorSet]) throws {
         let filename = "SwiftyColors"
         
         var lines = [
             "",
             "import UIKit",
             "",
-            "extension \(Spec.projectName) {",
+            "extension \(CommandLineTool.name) {",
             "\tclass Colors {"
         ]
         
