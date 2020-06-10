@@ -1,26 +1,25 @@
 //
-//  ColorsYALMParserTests.swift
-//  SwiftyAssetsTests
+//  ColorsCSVParserTests.swift
+//  SwiftyAssets
 //
-//  Created by Jean-Charles Neboit on 09/06/2020.
+//  Created by Jean-Charles Neboit on 03/05/2020.
 //
 
 import XCTest
 @testable import SwiftyAssets
 
-class ColorsYALMParserTests: AbstractXCTestCase {
+final class ColorsCSVParserTests: AbstractXCTestCase {
     func testParseColorsWithCleanColorsFile() {
-        let cleanColorsCSV = resourcesDirectory.appendingPathComponent("clean_colors").appendingPathExtension("yml")
+        let cleanColors = resourcesDirectory.appendingPathComponent("clean_colors").appendingPathExtension("csv")
         let names = ["primary", "secondary"]
         let lightColors = ["#c9121e", "#c9121e"]
         let darkColors = [nil, "#f2b500"]
         
         do {
             sleep(1)
-            let sut = try ColorsYAMLParser(path: cleanColorsCSV.path)
+            let sut = try ColorsCSVParser(path: cleanColors.path)
             
             XCTAssertEqual(sut.colors.count, 2)
-            sut.colors.sort { (lhs, rhs) -> Bool in lhs.name < rhs.name }
             for (i, color) in sut.colors.enumerated() {
                 XCTAssertEqual(color.name, names[i])
                 XCTAssertEqual(color.light.toHex, lightColors[i])
@@ -31,7 +30,16 @@ class ColorsYALMParserTests: AbstractXCTestCase {
         }
     }
     
+    func testParseColorsWithWrongColorsFile() {
+        let wrongColors = resourcesDirectory.appendingPathComponent("wrong_colors").appendingPathExtension("csv")
+        
+        XCTAssertThrowsError(try ColorsCSVParser(path: wrongColors.path)) { error in
+            XCTAssertEqual(error as? ColorParserError, ColorParserError.badHexColor)
+        }
+    }
+    
     static var allTests = [
         ("testParseColorsWithCleanColorsFile", testParseColorsWithCleanColorsFile),
+        ("testParseColorsWithWrongColorsFile", testParseColorsWithWrongColorsFile)
     ]
 }

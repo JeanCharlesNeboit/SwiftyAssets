@@ -9,11 +9,17 @@ import Foundation
 import SPMUtility
 
 class ColorsGenerator: AssetsGenerator {
-    private var csvParser: ColorsCSVParser?
+    private var colors = [ColorSet]()
     
     init?(result: ArgumentParser.Result, command: ColorsCommand) throws {
         try super.init(result: result, assetsCommand: command)
-        self.csvParser = try ColorsCSVParser(path: input)
+        
+        if let csvParser = try? ColorsCSVParser(path: input),
+            colors.count != 0 {
+            self.colors = csvParser.colors
+        } else if let yamlParser = try? ColorsYAMLParser(path: input) {
+            self.colors = yamlParser.colors
+        }
     }
     
     override func generate() throws {
@@ -23,10 +29,6 @@ class ColorsGenerator: AssetsGenerator {
     
     private func generateColors() throws {
         let xcassetsPath = "\(output)/\(CommandLineTool.name)\(Extension.xcassets.rawValue)/Colors"
-        
-        guard let colors = csvParser?.colors else {
-            return
-        }
         
         for color in colors {
             guard !color.name.isEmpty && !color.name.starts(with: "//") else { return }

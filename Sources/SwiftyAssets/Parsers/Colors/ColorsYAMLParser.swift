@@ -9,7 +9,7 @@ import Foundation
 import Yams
 
 class ColorsYAMLParser: YAMLParser {
-    var colors = [ColorSet]()
+    private(set) var colors: [ColorSet] = []
     
     override init(path: String) throws {
         try super.init(path: path)

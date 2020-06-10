@@ -1,25 +1,26 @@
 //
-//  ColorsCSVParserTests.swift
-//  SwiftyAssets
+//  ColorsYALMParserTests.swift
+//  SwiftyAssetsTests
 //
-//  Created by Jean-Charles Neboit on 03/05/2020.
+//  Created by Jean-Charles Neboit on 09/06/2020.
 //
 
 import XCTest
 @testable import SwiftyAssets
 
-final class ColorsCSVParserTests: AbstractXCTestCase {
+class ColorsYALMParserTests: AbstractXCTestCase {
     func testParseColorsWithCleanColorsFile() {
-        let cleanColorsCSV = resourcesDirectory.appendingPathComponent("clean_colors").appendingPathExtension("csv")
+        let cleanColors = resourcesDirectory.appendingPathComponent("clean_colors").appendingPathExtension("yml")
         let names = ["primary", "secondary"]
         let lightColors = ["#c9121e", "#c9121e"]
         let darkColors = [nil, "#f2b500"]
         
         do {
             sleep(1)
-            let sut = try ColorsCSVParser(path: cleanColorsCSV.path)
+            let sut = try ColorsYAMLParser(path: cleanColors.path)
             
             XCTAssertEqual(sut.colors.count, 2)
+            sut.colors.sort { (lhs, rhs) -> Bool in lhs.name < rhs.name }
             for (i, color) in sut.colors.enumerated() {
                 XCTAssertEqual(color.name, names[i])
                 XCTAssertEqual(color.light.toHex, lightColors[i])
@@ -31,16 +32,14 @@ final class ColorsCSVParserTests: AbstractXCTestCase {
     }
     
     func testParseColorsWithWrongColorsFile() {
-        let cleanColorsCSV = resourcesDirectory.appendingPathComponent("wrong_colors").appendingPathExtension("csv")
+        let wrongColors = resourcesDirectory.appendingPathComponent("wrong_colors").appendingPathExtension("yml")
         
-        
-        XCTAssertThrowsError(try ColorsCSVParser(path: cleanColorsCSV.path)) { error in
+        XCTAssertThrowsError(try ColorsYAMLParser(path: wrongColors.path)) { error in
             XCTAssertEqual(error as? ColorParserError, ColorParserError.badHexColor)
         }
     }
     
     static var allTests = [
         ("testParseColorsWithCleanColorsFile", testParseColorsWithCleanColorsFile),
-        ("testParseColorsWithWrongColorsFile", testParseColorsWithWrongColorsFile)
     ]
 }

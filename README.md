@@ -76,3 +76,7 @@ POSITIONAL ARGUMENTS:
 
 ### Generate Images
 `images` **INPUT** **OUTPUT**
+
+## SwiftyAssets Tests
+### **Generate Colors**
+`colors `

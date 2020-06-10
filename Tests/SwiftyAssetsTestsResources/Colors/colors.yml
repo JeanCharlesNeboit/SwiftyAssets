@@ -1,7 +1,6 @@
 primary:
-  light: #c9121e
+  light: "#c9121e"
 
 secondary:
-  light: #c9121e
-  dark: #f2b500
-  
+  light: "#c9121e"
+  dark: "#f2b500"

@@ -1,5 +1,5 @@
 //
-//  SwiftyAssetsTests.swift
+//  VersionCommandTests.swift
 //  SwiftyAssets
 //
 //  Created by Jean-Charles Neboit on 02/05/2020.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import SwiftyAssets
 
-final class SwiftyAssetsTests: AbstractXCTestCase {
+final class VersionCommandTests: AbstractXCTestCase {
     // MARK: - SwiftyAssets --version
     func testVersionCommand() throws {
         let binary = productsDirectory.appendingPathComponent("SwiftyAssetsCommandLineTool")
