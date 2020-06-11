@@ -9,7 +9,7 @@ import Foundation
 import SPMUtility
 
 class ImagesGenerator: AssetsGenerator {
-    private var csvParser: ImagesCSVParser?
+    private var images = [ImageSet]()
     private var imagesFolderPath: String?
     private var imagesPath: [String] = []
     
@@ -18,7 +18,12 @@ class ImagesGenerator: AssetsGenerator {
     init?(result: ArgumentParser.Result, command: ImagesCommand) throws {
         try super.init(result: result, assetsCommand: command)
         
-        self.csvParser = try ImagesCSVParser(path: input)
+        if let csvParser = try? ImagesCSVParser(path: input),
+            images.count != 0 {
+            self.images = csvParser.images
+        } else if let yamlParser = try? ImagesYAMLParser(path: input) {
+            self.images = yamlParser.images
+        }
         imagesFolderPath = command.imagesFolderPath(in: result)
     }
     
@@ -56,8 +61,6 @@ class ImagesGenerator: AssetsGenerator {
     private func generateImages() throws {
         let xcassetsPath = "\(output)/\(CommandLineTool.name)\(Extension.xcassets.rawValue)/Images"
         
-        guard let images = csvParser?.images else { return }
-        
         for image in images {
             guard let imagePath = imagesPath.first(where: { $0.contains("\(image.name)") }),
                 !image.name.isEmpty && !image.name.starts(with: "//"),
@@ -73,13 +76,13 @@ class ImagesGenerator: AssetsGenerator {
         try self.generateSwiftFile(images: images)
     }
     
-    private func generateImageset(with image: Image, from inputPath: String, to outputPath: String) throws {
+    private func generateImageset(with image: ImageSet, from inputPath: String, to outputPath: String) throws {
         let filename = "Contents"
         
         var info = AssetsSet.info
         info.appendToLast(newElement: ",")
         
-        Image.Scale.allCases.forEach { scale in
+        ImageSet.Scale.allCases.forEach { scale in
             var arguments = ["--format", formatOption]
             
             if let width = image.width {
@@ -138,7 +141,7 @@ class ImagesGenerator: AssetsGenerator {
         }
     }
     
-    private func generateSwiftFile(images: [Image]) throws {
+    private func generateSwiftFile(images: [ImageSet]) throws {
         let filename = "SwiftyImages"
         
         var lines = [

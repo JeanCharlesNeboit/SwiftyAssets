@@ -7,26 +7,19 @@
 
 import Foundation
 
-fileprivate enum ImageHeader: String {
-    case name = "Name"
-    case width = "Width"
-    case height = "Height"
-}
-
 class ImagesCSVParser: CSVParser {
-    private(set) var images: [Image] = []
+    private(set) var images: [ImageSet] = []
     
     override init(path: String) throws {
         try super.init(path: path)
         
         for namedRow in csv.namedRows {
-            if let name = namedRow[ImageHeader.name.rawValue],
-                let _width = namedRow[ImageHeader.width.rawValue],
-                let _height = namedRow[ImageHeader.height.rawValue] {
-                
-                let width = Int(_width) ?? nil
-                let height = Int(_height) ?? nil
-                images.append(Image(name: name, width: width, height: height))
+            if let name = namedRow[ImageKeys.name.rawValue],
+                let width = namedRow[ImageKeys.width.rawValue],
+                let height = namedRow[ImageKeys.height.rawValue] {
+                if let imageSet = try ImageSet(name: name, width: width, height: height) {
+                    images.append(imageSet)
+                }
             }
         }
     }

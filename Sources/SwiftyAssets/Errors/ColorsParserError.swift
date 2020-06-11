@@ -8,14 +8,14 @@
 import Foundation
 
 enum ColorParserError: Error {
-    case badHexColor
+    case badHex
 }
 
 extension ColorParserError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .badHexColor:
-            return NSLocalizedString("Unable to decode hex color.", comment: "BadHexColor")
+        case .badHex:
+            return NSLocalizedString("Unable to decode color hex.", comment: "badHex")
         }
     }
 }

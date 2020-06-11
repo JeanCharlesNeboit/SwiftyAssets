@@ -15,12 +15,12 @@ struct ColorSet {
     
     init?(name: String, lightHex: String, darkHex: String?) throws {
         guard let light = NSColor(hex: lightHex) else {
-            throw ColorParserError.badHexColor
+            throw ColorParserError.badHex
         }
         
         if let darkHex = darkHex {
             guard let dark = NSColor(hex: darkHex) else {
-                throw ColorParserError.badHexColor
+                throw ColorParserError.badHex
             }
             
             self.dark = dark

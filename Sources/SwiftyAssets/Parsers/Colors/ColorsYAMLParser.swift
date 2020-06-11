@@ -24,6 +24,5 @@ class ColorsYAMLParser: YAMLParser {
                 }
             }
         })
-        //print(loadedDictionary)
     }
 }

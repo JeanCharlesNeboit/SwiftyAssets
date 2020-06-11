@@ -13,17 +13,17 @@ struct ImageSet {
     let height: Int?
     
     init?(name: String, width: String?, height: String?) throws {
-        guard Int(width) != nil || width == "",
-            Int(height) != nil || height == "" else {
-            throw ImagesParserError.badDimensions
-        }
-        
-        let _width = Int(width) ?? nil
-        let _height = Int(height) ?? nil
-        
-        guard _width != nil || _height != nil else {
+        guard width?.notEmptyOrNil != nil || height?.notEmptyOrNil != nil else {
             throw ImagesParserError.noDimensions
         }
+        
+        guard width?.isNumeric == true || width?.notEmptyOrNil == nil,
+            height?.isNumeric == true || height?.notEmptyOrNil == nil else {
+            throw ImagesParserError.badDimensions
+        }
+
+        let _width = Int(width ?? "") ?? nil
+        let _height = Int(height ?? "") ?? nil
         
         self.name = name
         self.width = _width

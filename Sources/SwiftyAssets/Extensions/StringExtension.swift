@@ -23,4 +23,15 @@ extension String {
     mutating func removeWhitespaces() {
         self = self.removeWhitespaces()
     }
+    
+    var isNumeric: Bool {
+        return NumberFormatter().number(from: self) != nil
+    }
+    
+    var notEmptyOrNil: String? {
+        guard !isEmpty else {
+            return nil
+        }
+        return self
+    }
 }
