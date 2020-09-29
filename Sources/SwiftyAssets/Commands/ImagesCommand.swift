@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 public class ImagesCommand: AssetsCommand, Command {
     // MARK: - Properties

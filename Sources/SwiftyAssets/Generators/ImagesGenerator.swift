@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 class ImagesGenerator: AssetsGenerator {
     private var images = [ImageSet]()

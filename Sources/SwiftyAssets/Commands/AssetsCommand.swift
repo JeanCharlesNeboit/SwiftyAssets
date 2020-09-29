@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 public class AssetsCommand {
     let subparser: ArgumentParser
@@ -51,5 +51,10 @@ extension AssetsCommand {
         }
         
         return result.get(copyright) ?? defaultCopyright
+    }
+    
+    func getInputFileType(in result: ArgumentParser.Result, for option: OptionArgument<String>?) -> String? {
+        guard let option = option else { return nil }
+        return result.get(option)
     }
 }

@@ -51,7 +51,7 @@ class FileGenerator {
     }
     
     func generate(atPath path: String, overwrite: Bool = true) throws {
-        var isDir : ObjCBool = false
+        var isDir: ObjCBool = false
         if !FileManager.default.fileExists(atPath: path, isDirectory: &isDir) {
             try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
         }
@@ -62,7 +62,7 @@ class FileGenerator {
             return
         }
         
-        let fileContent = "\(fileHeader?.header(filename: "\(filename)\(ext.rawValue)").appending("\n") ?? "")\(lines.joined(separator: "\n"))"
+        let fileContent = "\(fileHeader?.header(filename: "\(filename)\(ext.rawValue)").appending("\n") ?? "")\(lines.joined(separator: "\n").appending("\n"))"
         FileManager.default.createFile(atPath: filePath, contents: fileContent.data(using: .utf8), attributes: nil)
     }
 }

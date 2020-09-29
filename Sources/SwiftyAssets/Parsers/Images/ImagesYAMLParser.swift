@@ -9,10 +9,10 @@ import Foundation
 
 class ImagesYAMLParser: YAMLParser {
     private(set) var images: [ImageSet] = []
-    
+
     override init(path: String) throws {
         try super.init(path: path)
-        
+
         try loadedDictionary.keys.forEach({ key in
             let name = key
             if let value = loadedDictionary[key] as? [String: Any] {

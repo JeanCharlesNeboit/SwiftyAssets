@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 class AssetsGenerator {
     let command: AssetsCommand
@@ -23,7 +23,7 @@ class AssetsGenerator {
             return nil
         }
 
-        var isDir : ObjCBool = true
+        var isDir: ObjCBool = true
         if !FileManager.default.fileExists(atPath: outputArg, isDirectory: &isDir) {
             try FileManager.default.createDirectory(atPath: outputArg, withIntermediateDirectories: true, attributes: nil)
         }
@@ -49,7 +49,6 @@ class AssetsGenerator {
             "import Foundation",
             "",
             "class \(filename) {",
-            "",
             "}"
         ]
         

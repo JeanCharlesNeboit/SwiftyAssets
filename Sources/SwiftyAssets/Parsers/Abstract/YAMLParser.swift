@@ -9,7 +9,7 @@ import Yams
 
 class YAMLParser {
     let loadedDictionary: [String: Any]
-    
+
     init(path: String) throws {
         let mapYAML = try String(contentsOfFile: path, encoding: .utf8)
         loadedDictionary = try Yams.load(yaml: mapYAML) as? [String: Any] ?? [:]

@@ -15,15 +15,10 @@ enum Extension: String {
     case lproj = ".lproj"
     case colorset = ".colorset"
     case imageset = ".imageset"
-}
+    case yaml = ".yml"
+    case csv = ".csv"
 
-struct AssetsSet {
-    static var info: [String] {
-        return [
-            "\(String(repeating: "\t", count: 1))\"info\" : {",
-            "\(String(repeating: "\t", count: 2))\"author\" : \"xcode\",",
-            "\(String(repeating: "\t", count: 2))\"version\" : 1",
-            "\(String(repeating: "\t", count: 1))}"
-        ]
+    var withoutDot: String {
+        return rawValue.replacingOccurrences(of: ".", with: "")
     }
 }

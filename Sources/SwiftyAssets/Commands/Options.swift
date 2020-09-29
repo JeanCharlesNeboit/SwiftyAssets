@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 protocol ArgumentProtocol {
     associatedtype T
@@ -24,18 +24,17 @@ enum Options: String, CaseIterable, ArgumentProtocol {
     case version = "--version"
     case plist = "--plist"
     case resources = "--resources"
+    case inputFileType = "--input-file-type"
     
     init?(shortName: String) {
-        for option in Options.allCases {
-            if option.shortName == shortName {
-                self = option
-                return
-            }
+        if let option = Options.allCases.first(where: { $0.shortName == shortName }) {
+            self = option
+            return
         }
         return nil
     }
     
-    var shortName: String {
+    var shortName: String? {
         switch self {
         case .projectName:
             return "-n"
@@ -47,6 +46,8 @@ enum Options: String, CaseIterable, ArgumentProtocol {
             return "-p"
         case .resources:
             return "-r"
+        case .inputFileType:
+            return "-i"
         }
     }
     
@@ -62,6 +63,8 @@ enum Options: String, CaseIterable, ArgumentProtocol {
             return "Path of your project's Info.plist"
         case .resources:
             return "Path of the resources"
+        case .inputFileType:
+            return "Use this option to specify the input file type"
         }
     }
     

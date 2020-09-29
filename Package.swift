@@ -6,15 +6,15 @@ import PackageDescription
 let package = Package(
     name: "SwiftyAssets",
     platforms: [
-        .macOS(.v10_14),
+        .macOS(.v10_15)
     ],
     products: [
-        .executable(name: "SwiftyAssetsCommandLineTool", targets: ["SwiftyAssetsCommandLineTool"]),
-        .library(name: "SwiftyAssets", targets: ["SwiftyAssets"]),
+        .executable(name: "SwiftyAssetsCLI", targets: ["SwiftyAssetsCLI"]),
+        .library(name: "SwiftyAssets", targets: ["SwiftyAssets"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/apple/swift-package-manager.git", from: "0.5.0"),
+        .package(url: "https://github.com/apple/swift-tools-support-core.git", from: "0.1.10"),
         .package(url: "https://github.com/swiftcsv/SwiftCSV.git", from: "0.5.5"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "3.0.0")
     ],
@@ -23,12 +23,12 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "SwiftyAssets",
-            dependencies: ["SPMUtility", "SwiftCSV", "Yams"]),
+            dependencies: ["SwiftToolsSupport-auto", "SwiftCSV", "Yams"]),
         .target(
-            name: "SwiftyAssetsCommandLineTool",
+            name: "SwiftyAssetsCLI",
             dependencies: ["SwiftyAssets"]),
         .testTarget(
             name: "SwiftyAssetsTests",
-            dependencies: ["SwiftyAssets"]),
+            dependencies: ["SwiftyAssets"])
     ]
 )

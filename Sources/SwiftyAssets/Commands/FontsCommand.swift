@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 // MARK: - Command
 public class FontsCommand: AssetsCommand, Command {
@@ -27,13 +27,5 @@ public class FontsCommand: AssetsCommand, Command {
     public func run(with result: ArgumentParser.Result) throws {
         let generator = try FontsGenerator(result: result, command: self)
         try generator?.generate()
-    }
-}
-
-// MARK: - ArgumentParser.Result
-extension FontsCommand {
-    func plist(in result: ArgumentParser.Result) -> String? {
-        guard let plist = plistOption else { return nil }
-        return result.get(plist)
     }
 }

@@ -7,16 +7,21 @@
 
 import XCTest
 import class Foundation.Bundle
+@testable import SwiftyAssets
 
 class AbstractXCTestCase: XCTestCase {
     var testsDirectory: URL {
         return URL(fileURLWithPath: #file).deletingLastPathComponent()
     }
-    
+
     var resourcesDirectory: URL {
         return testsDirectory.appendingPathComponent("Resources")
     }
-    
+
+    func getURLInResources(path: String, ext: Extension) -> URL {
+        return resourcesDirectory.appendingPathComponent(path).appendingPathExtension(ext.withoutDot)
+    }
+
     /// Returns path to the built products directory.
     var productsDirectory: URL {
       #if os(macOS)

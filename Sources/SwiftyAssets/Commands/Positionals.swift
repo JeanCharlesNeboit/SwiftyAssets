@@ -26,7 +26,7 @@ enum Positional {
     var usage: String {
         switch self {
         case .input(let command):
-            return "Path of the \(command) CSV file"
+            return "Path of the \(command) file"
         case .output(let command):
             return "Path of the folder where \(command) will be generated"
         case .plist:

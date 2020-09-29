@@ -49,7 +49,7 @@ SUBCOMMANDS:
   strings         Generate Localizable Strings
 ```
 
-### **Localizable Strings**
+### **Generate Localizable Strings**
 #### *Show the help*
 `SwiftyAssets strings --help`
 
@@ -65,11 +65,32 @@ POSITIONAL ARGUMENTS:
   output               Path of the folder where strings will be generated
 ```
 
-#### *Generate*
-`SwiftyAssets strings INPUT OUTPUT`
+#### *Example*
+```
+SwiftyAssets strings INPUT OUTPUT
+```
 
 ### **Generate Colors**
-`colors` **INPUT** **OUTPUT**
+#### *Show the help*
+`SwiftyAssets colors --help`
+
+```
+OVERVIEW: Generate Named Colors
+
+OPTIONS:
+  --copyright, -c         Copyright of the project
+  --input-file-type, -i   Use this option to specify the input file type
+  --project-name, -n      Name of the project
+
+POSITIONAL ARGUMENTS:
+  input                   Path of the colors file
+  output                  Path of the folder where colors will be generated
+```
+
+#### *Example*
+```
+SwiftyAssets colors **INPUT** **OUTPUT**
+```
 
 ### Generate Fonts
 `fonts` **INPUT** **OUTPUT**

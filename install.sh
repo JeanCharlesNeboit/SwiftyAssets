@@ -5,4 +5,4 @@
 
 swift build -c release
 cd .build/release
-cp -f SwiftyAssetsCommandLineTool /usr/local/bin/swiftyassets
+cp -f SwiftyAssetsCLI /usr/local/bin/swiftyassets

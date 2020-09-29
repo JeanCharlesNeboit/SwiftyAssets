@@ -10,7 +10,7 @@ import SwiftCSV
 
 class CSVParser {
     let csv: CSV
-    
+
     init(path: String) throws {
         self.csv = try CSV(url: URL(fileURLWithPath: path))
     }

@@ -6,18 +6,16 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 class FontsGenerator: AssetsGenerator {
-    typealias FontFamily = String
-    
     private var fontsGroupedByFamily: [FontFamily: [Font]] = [:]
     private var plistPath: String?
     
     init?(result: ArgumentParser.Result, command: FontsCommand) throws {
         try super.init(result: result, assetsCommand: command)
         
-        plistPath = command.plist(in: result)
+        plistPath = result.get(command.plistOption)
         
         try parseFonts()
         try createSwiftFile(fonts: fontsGroupedByFamily)
@@ -49,7 +47,7 @@ class FontsGenerator: AssetsGenerator {
     private func createSwiftFile(fonts: [FontFamily: [Font]]) throws {
         let filename = "SwiftyFonts"
         let path = "\(output)"
-        
+
         var lines = [
             "",
             "import UIKit",
@@ -68,7 +66,7 @@ class FontsGenerator: AssetsGenerator {
                 }
             }
         }
-        
+
         lines.append(contentsOf: [
             "",
             "\(String(repeating: "\t", count: 3))func font(withSize size: CGFloat) -> UIFont {",
@@ -82,24 +80,24 @@ class FontsGenerator: AssetsGenerator {
         let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
         try fileGenerator.generate(atPath: path)
     }
-    
+
     private func addFontsToPList(fonts: [Font]) throws {
         guard let path = plistPath else { return }
-        
+
         let plistService = PlistService(path: path)
-        
+
         guard var dictionary = plistService.read() else {
             return
         }
-        
+
         var fontsProvidedByApp = dictionary[PlistService.FontsProvidedByAppKey] as? [String] ?? [String]()
-        
+
         fonts.forEach { font in
             fontsProvidedByApp.append(font.fileName)
         }
-        
+
         dictionary[PlistService.FontsProvidedByAppKey] = fontsProvidedByApp
-        
+
         try plistService.write(dict: dictionary)
     }
 }

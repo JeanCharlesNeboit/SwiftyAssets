@@ -10,10 +10,10 @@ import Foundation
 class StringsCSVParser: CSVParser {
     private(set) var languages: [Language] = []
     private(set) var keys: [String]?
-    
+
     override init(path: String) throws {
         try super.init(path: path)
-        
+
         let locales = Array(csv.enumeratedRows[0].dropFirst())
         for locale in locales {
             if let translatedColumn = csv.enumeratedColumns.first(where: { (column) -> Bool in
@@ -24,11 +24,10 @@ class StringsCSVParser: CSVParser {
                 if components.count == 2 {
                     let code = components[0]
                     let country = components[1]
-                    
+
                     languages.append(Language(code: code, country: country, translatedStrings: translatedStrings))
                 }
             }
-            
         }
         keys = Array(csv.enumeratedColumns[0].rows.dropFirst())
     }

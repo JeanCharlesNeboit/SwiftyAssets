@@ -21,7 +21,6 @@ extension CTFont {
             guard let familyName = CTFontCopyAttribute(font, kCTFontFamilyNameAttribute) as? String,
                 let style = CTFontCopyAttribute(font, kCTFontStyleNameAttribute) as? String else { return nil }
             
-            
             return Font(fileName: fileName, family: familyName, postScriptName: postScriptName, style: style)
         }
     }

@@ -57,7 +57,7 @@ struct ColorSet {
     private func colorJson(for color: NSColor, appearance: [String]? = nil) -> [String] {
         var lines = [
             "\(String(repeating: "\t", count: 2)){",
-            "\(String(repeating: "\t", count: 3))\"idiom\" : \"universal\",",
+            "\(String(repeating: "\t", count: 3))\"idiom\" : \"universal\","
         ]
         
         if let appearance = appearance {

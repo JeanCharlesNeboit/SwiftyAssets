@@ -13,10 +13,10 @@ struct Language {
     let translatedStrings: [String]
     
     var flag: String {
-        let base : UInt32 = 127397
+        let base: UInt32 = 127397
         var flag = ""
-        for v in country.uppercased().unicodeScalars {
-          flag.unicodeScalars.append(UnicodeScalar(base + v.value)!)
+        country.uppercased().unicodeScalars.forEach { value in
+            flag.unicodeScalars.append(UnicodeScalar(base + value.value)!)
         }
         return flag
     }

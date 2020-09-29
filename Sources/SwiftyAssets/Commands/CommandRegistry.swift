@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SPMUtility
-import Basic
+import TSCBasic
+import TSCUtility
 
 public struct CommandRegistry {
     private let parser: ArgumentParser
@@ -26,11 +26,9 @@ public struct CommandRegistry {
         do {
             let parsedArguments = try parse()
             try process(arguments: parsedArguments)
-        }
-        catch let error as ArgumentParserError {
+        } catch let error as ArgumentParserError {
             print(error.description)
-        }
-        catch let error {
+        } catch let error {
             print(error.localizedDescription)
         }
     }
@@ -57,6 +55,4 @@ public struct CommandRegistry {
         }
         try command.run(with: arguments)
     }
-
-    
 }

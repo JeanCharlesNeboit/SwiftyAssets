@@ -6,22 +6,39 @@
 //
 
 import Foundation
-import SPMUtility
+import TSCUtility
 
 class ColorsGenerator: AssetsGenerator {
+    // MARK: - Properties
     private var colors = [ColorSet]()
+    private var inputFileType: InputFileType = .yaml
     
+    // MARK: - Initialization
     init?(result: ArgumentParser.Result, command: ColorsCommand) throws {
         try super.init(result: result, assetsCommand: command)
         
-        if let csvParser = try? ColorsCSVParser(path: input),
-            colors.count != 0 {
-            self.colors = csvParser.colors
-        } else if let yamlParser = try? ColorsYAMLParser(path: input) {
-            self.colors = yamlParser.colors
+        if let option = result.get(command.inputFileTypeOption),
+            let ext = InputFileType(ext: option) {
+            inputFileType = ext
+        }
+        parseColors()
+    }
+    
+    // MARK: - Parsing
+    private func parseColors() {
+        switch inputFileType {
+        case .yaml:
+            if let yamlParser = try? ColorsYAMLParser(path: input) {
+                self.colors = yamlParser.colors
+            }
+        case .csv:
+            if let csvParser = try? ColorsCSVParser(path: input) {
+                self.colors = csvParser.colors
+            }
         }
     }
     
+    // MARK: - Generation
     override func generate() throws {
         try super.generate()
         try generateColors()
@@ -67,7 +84,10 @@ class ColorsGenerator: AssetsGenerator {
             "\tclass Colors {"
         ]
         
-        for color in colors {
+        colors.enumerated().forEach { iterator in
+            let color = iterator.element
+            let offset = iterator.offset
+            
             guard !color.name.isEmpty else { return }
             
             if color.name.starts(with: "//") {
@@ -76,9 +96,12 @@ class ColorsGenerator: AssetsGenerator {
                 lines.append(contentsOf: [
                     "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor {",
                     "\(String(repeating: "\t", count: 3))return UIColor(named: \"\(color.name)\")!",
-                    "\(String(repeating: "\t", count: 2))}",
-                    ""
+                    "\(String(repeating: "\t", count: 2))}"
                 ])
+                
+                if offset != colors.count - 1 {
+                    lines.append("")
+                }
             }
         }
         
