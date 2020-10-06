@@ -13,7 +13,7 @@ class Plist {
 
 class PlistService {
     // MARK: - Static Properties
-    static let FontsProvidedByAppKey = "Fonts provided by application"
+    static let FontsProvidedByAppKey = "UIAppFonts"
 
     // MARK: - Properties
     var path: String
@@ -33,10 +33,7 @@ class PlistService {
     }
     
     func write(dict: [String: Any]) throws {
-        guard let url = URL(string: "file://\(path)") else {
-            return
-        }
-            
+        let url = URL(fileURLWithPath: path)
         let plistData = try PropertyListSerialization.data(fromPropertyList: dict, format: .xml, options: 0)
         try plistData.write(to: url)
     }

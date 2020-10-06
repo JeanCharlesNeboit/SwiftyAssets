@@ -9,5 +9,17 @@ import XCTest
 @testable import SwiftyAssets
 
 final class FontsParserTests: AbstractXCTestCase {
-
+    func testParseFonts() {
+        let fontDirectory = resourcesDirectory.appendingPathComponent("Fonts/apple_garamond", isDirectory: true)
+        
+        do {
+            sleep(1)
+            let sut = try FontsParser(path: fontDirectory.path)
+            XCTAssertEqual(sut.fontsGroupedByFamily.count, 2)
+            XCTAssertEqual(sut.fontsGroupedByFamily["Apple Garamond"]?.count, 4)
+            XCTAssertEqual(sut.fontsGroupedByFamily["Apple Garamond Light"]?.count, 2)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+    }
 }

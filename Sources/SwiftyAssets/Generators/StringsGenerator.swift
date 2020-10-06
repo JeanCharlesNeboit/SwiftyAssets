@@ -17,7 +17,6 @@ class StringsGenerator: AssetsGenerator {
     // MARK: - Initialization
     init?(result: ArgumentParser.Result, command: StringsCommand) throws {
         try super.init(result: result, assetsCommand: command)
-        //self.csvParser = try StringsCSVParser(path: input)
         
         if let option = result.get(command.inputFileTypeOption),
             let ext = InputFileType(ext: option) {
