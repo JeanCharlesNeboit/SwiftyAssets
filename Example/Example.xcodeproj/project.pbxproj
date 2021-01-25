@@ -13,11 +13,17 @@
 		7E9A5995252CC645004951DF /* AppleGaramond-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7EFF9614252CB1F2003CBC9F /* AppleGaramond-Bold.ttf */; };
 		7E9A5996252CC645004951DF /* AppleGaramond-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7EFF9613252CB1F2003CBC9F /* AppleGaramond-Italic.ttf */; };
 		7E9A5997252CC645004951DF /* AppleGaramond.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7EFF960F252CB1F2003CBC9F /* AppleGaramond.ttf */; };
+		7E9A599C252D0B3B004951DF /* apple1.svg in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A599B252D0B3B004951DF /* apple1.svg */; };
+		7E9A599F252D0BCC004951DF /* images.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A599E252D0BCC004951DF /* images.yml */; };
+		7E9A59A3252D0D16004951DF /* SwiftyImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9A59A2252D0D16004951DF /* SwiftyImages.swift */; };
+		7E9A59A6252D0D2A004951DF /* SwiftyAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A59A5252D0D2A004951DF /* SwiftyAssets.xcassets */; };
+		7E9A59A9252D0E46004951DF /* colors.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7E9A59A8252D0E46004951DF /* colors.yml */; };
+		7E9A59AC252D0F32004951DF /* SwiftyColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9A59AB252D0F32004951DF /* SwiftyColors.swift */; };
 		7EE4D52625267294001D18B9 /* ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4D52525267294001D18B9 /* ExampleApp.swift */; };
 		7EE4D52825267294001D18B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4D52725267294001D18B9 /* ContentView.swift */; };
 		7EE4D52A25267294001D18B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EE4D52925267294001D18B9 /* Assets.xcassets */; };
 		7EE4D52D25267294001D18B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EE4D52C25267294001D18B9 /* Preview Assets.xcassets */; };
-		7EE4D53E252673DB001D18B9 /* strings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 7EE4D53D252673DB001D18B9 /* strings.yaml */; };
+		7EE4D53E252673DB001D18B9 /* strings.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7EE4D53D252673DB001D18B9 /* strings.yml */; };
 		7EE4D55425267658001D18B9 /* SwiftyStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4D54625267658001D18B9 /* SwiftyStrings.swift */; };
 		7EE4D55525267658001D18B9 /* SwiftyAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE4D54725267658001D18B9 /* SwiftyAssets.swift */; };
 		7EE4D55E25267675001D18B9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7EE4D55C25267675001D18B9 /* Localizable.strings */; };
@@ -25,13 +31,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E9A599B252D0B3B004951DF /* apple1.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = apple1.svg; sourceTree = "<group>"; };
+		7E9A599E252D0BCC004951DF /* images.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = images.yml; sourceTree = "<group>"; };
+		7E9A59A2252D0D16004951DF /* SwiftyImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyImages.swift; sourceTree = "<group>"; };
+		7E9A59A5252D0D2A004951DF /* SwiftyAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SwiftyAssets.xcassets; sourceTree = "<group>"; };
+		7E9A59A8252D0E46004951DF /* colors.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = colors.yml; sourceTree = "<group>"; };
+		7E9A59AB252D0F32004951DF /* SwiftyColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyColors.swift; sourceTree = "<group>"; };
 		7EE4D52225267293001D18B9 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EE4D52525267294001D18B9 /* ExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleApp.swift; sourceTree = "<group>"; };
 		7EE4D52725267294001D18B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7EE4D52925267294001D18B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7EE4D52C25267294001D18B9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7EE4D52E25267294001D18B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7EE4D53D252673DB001D18B9 /* strings.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = strings.yaml; sourceTree = "<group>"; };
+		7EE4D53D252673DB001D18B9 /* strings.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = strings.yml; sourceTree = "<group>"; };
 		7EE4D54125267455001D18B9 /* swiftyasset.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = swiftyasset.sh; sourceTree = "<group>"; };
 		7EE4D54625267658001D18B9 /* SwiftyStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyStrings.swift; sourceTree = "<group>"; };
 		7EE4D54725267658001D18B9 /* SwiftyAssets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyAssets.swift; sourceTree = "<group>"; };
@@ -60,6 +72,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E9A599A252D0B2E004951DF /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				7E9A599B252D0B3B004951DF /* apple1.svg */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		7EE4D51925267293001D18B9 = {
 			isa = PBXGroup;
 			children = (
@@ -102,8 +122,11 @@
 			isa = PBXGroup;
 			children = (
 				7EFF960D252CB1F2003CBC9F /* Fonts */,
+				7E9A599A252D0B2E004951DF /* Images */,
 				7EE4D54125267455001D18B9 /* swiftyasset.sh */,
-				7EE4D53D252673DB001D18B9 /* strings.yaml */,
+				7EE4D53D252673DB001D18B9 /* strings.yml */,
+				7E9A599E252D0BCC004951DF /* images.yml */,
+				7E9A59A8252D0E46004951DF /* colors.yml */,
 			);
 			path = SwiftyAssets;
 			sourceTree = "<group>";
@@ -112,9 +135,12 @@
 			isa = PBXGroup;
 			children = (
 				7EE4D55C25267675001D18B9 /* Localizable.strings */,
+				7E9A59A5252D0D2A004951DF /* SwiftyAssets.xcassets */,
 				7EE4D54725267658001D18B9 /* SwiftyAssets.swift */,
 				7EE4D54625267658001D18B9 /* SwiftyStrings.swift */,
 				7EFF961C252CB21D003CBC9F /* SwiftyFonts.swift */,
+				7E9A59A2252D0D16004951DF /* SwiftyImages.swift */,
+				7E9A59AB252D0F32004951DF /* SwiftyColors.swift */,
 			);
 			path = GeneratedAssets;
 			sourceTree = "<group>";
@@ -202,6 +228,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7E9A599F252D0BCC004951DF /* images.yml in Resources */,
 				7E9A5994252CC645004951DF /* AppleGaramond-BoldItalic.ttf in Resources */,
 				7EE4D52D25267294001D18B9 /* Preview Assets.xcassets in Resources */,
 				7E9A5997252CC645004951DF /* AppleGaramond.ttf in Resources */,
@@ -209,8 +236,11 @@
 				7E9A5995252CC645004951DF /* AppleGaramond-Bold.ttf in Resources */,
 				7E9A5992252CC645004951DF /* AppleGaramond-Light.ttf in Resources */,
 				7EE4D52A25267294001D18B9 /* Assets.xcassets in Resources */,
-				7EE4D53E252673DB001D18B9 /* strings.yaml in Resources */,
+				7E9A59A6252D0D2A004951DF /* SwiftyAssets.xcassets in Resources */,
+				7EE4D53E252673DB001D18B9 /* strings.yml in Resources */,
+				7E9A59A9252D0E46004951DF /* colors.yml in Resources */,
 				7E9A5993252CC645004951DF /* AppleGaramond-LightItalic.ttf in Resources */,
+				7E9A599C252D0B3B004951DF /* apple1.svg in Resources */,
 				7E9A5996252CC645004951DF /* AppleGaramond-Italic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,9 +275,11 @@
 			files = (
 				7EE4D52825267294001D18B9 /* ContentView.swift in Sources */,
 				7EE4D52625267294001D18B9 /* ExampleApp.swift in Sources */,
+				7E9A59AC252D0F32004951DF /* SwiftyColors.swift in Sources */,
 				7EFF961D252CB21D003CBC9F /* SwiftyFonts.swift in Sources */,
 				7EE4D55525267658001D18B9 /* SwiftyAssets.swift in Sources */,
 				7EE4D55425267658001D18B9 /* SwiftyStrings.swift in Sources */,
+				7E9A59A3252D0D16004951DF /* SwiftyImages.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

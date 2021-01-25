@@ -148,6 +148,7 @@ class ImagesGenerator: AssetsGenerator {
             "",
             "import UIKit",
             "",
+            "// swiftlint:disable force_unwrapping",
             "extension \(CommandLineTool.name) {",
             "\tclass Images {"
         ]
@@ -169,7 +170,8 @@ class ImagesGenerator: AssetsGenerator {
         
         lines.append(contentsOf: [
             "\t}",
-            "}"
+            "}",
+            "// swiftlint:enable force_unwrapping"
         ])
         
         let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)

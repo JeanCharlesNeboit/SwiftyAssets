@@ -80,6 +80,7 @@ class ColorsGenerator: AssetsGenerator {
             "",
             "import UIKit",
             "",
+            "// swiftlint:disable force_unwrapping",
             "extension \(CommandLineTool.name) {",
             "\tclass Colors {"
         ]
@@ -107,7 +108,8 @@ class ColorsGenerator: AssetsGenerator {
         
         lines.append(contentsOf: [
             "\t}",
-            "}"
+            "}",
+            "// swiftlint:enable force_unwrapping"
         ])
         
         let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)

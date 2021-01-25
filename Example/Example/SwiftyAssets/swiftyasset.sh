@@ -7,7 +7,13 @@
 #
 
 # Strings
-swiftyassets strings ./Example/SwiftyAssets/strings.yaml ./Example/GeneratedAssets
+swiftyassets strings ./Example/SwiftyAssets/strings.yml ./Example/GeneratedAssets
 
 # Fonts
 swiftyassets fonts ./Example/SwiftyAssets/Fonts ./Example/GeneratedAssets --plist ./Example/Info.plist
+
+# Images
+swiftyassets images ./Example/SwiftyAssets/images.yml ./Example/GeneratedAssets --resources ./Example/SwiftyAssets/Images
+
+# Colors
+swiftyassets colors ./Example/SwiftyAssets/colors.yml ./Example/GeneratedAssets

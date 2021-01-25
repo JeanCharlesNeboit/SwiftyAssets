@@ -9,9 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text(" \(SwiftyAssets.Strings.apple)")
-            .font(SwiftyAssets.Font.AppleGaramond.regular.font(withSize: 34, relativeTo: .largeTitle))
-            .padding()
+        VStack(alignment: .center) {
+            #warning("Add SwiftyAssets.Images SwiftUI Image property")
+            Image(uiImage: SwiftyAssets.Images.apple1)
+            #warning("Add SwiftyAssets.Colors SwiftUI Color property")
+            Text(SwiftyAssets.Strings.think_different)
+                .font(SwiftyAssets.Font.AppleGaramond.regular.font(withSize: 34, relativeTo: .largeTitle))
+                .foregroundColor(Color(SwiftyAssets.Colors.think_different))
+                .padding()
+        }
     }
 }
 

@@ -22,4 +22,6 @@ final class FontsParserTests: AbstractXCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
+    
+    #warning("Check plist in a folder with space in name (eg: Supporting Files. Bug seems appear")
 }

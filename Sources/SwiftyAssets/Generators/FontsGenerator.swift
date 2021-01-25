@@ -47,6 +47,7 @@ class FontsGenerator: AssetsGenerator {
             "",
             "import Foundation",
             "",
+            "// swiftlint:disable force_unwrapping nesting",
             "protocol SwiftyAssetsFontProtocol {",
             "\tvar postScriptName: String { get }",
             "}",
@@ -99,7 +100,8 @@ class FontsGenerator: AssetsGenerator {
             "\(String(repeating: "\t", count: 2))return Font.custom(self.postScriptName, size: size, relativeTo: style)",
             "\(String(repeating: "\t", count: 1))}",
             "}",
-            "#endif"
+            "#endif",
+            "// swiftlint:enable force_unwrapping nesting",
         ])
         
         let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
@@ -123,8 +125,7 @@ class FontsGenerator: AssetsGenerator {
         do {
             try plistService.write(dict: dictionary)
         } catch let error {
-            print("error: \(error)")
-            exit(1)
+            LoggerService.shared.error(message: error.localizedDescription)
         }
     }
 }
