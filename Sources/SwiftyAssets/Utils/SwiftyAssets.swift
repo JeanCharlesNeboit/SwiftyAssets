@@ -11,5 +11,5 @@ public struct CommandLineTool {
     public static let name = "SwiftyAssets"
     public static let usage = "[--version] [--help] <command> <options>"
     public static let overview = "\(CommandLineTool.name) is an open source Command Line Tool used to generate iOS, WatchOS, macOS & tvOS assets."
-    public static let version = "v0.0.2"
+    public static let version = "v0.0.3"
 }

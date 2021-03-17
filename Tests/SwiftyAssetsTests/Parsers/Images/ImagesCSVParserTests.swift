@@ -10,7 +10,7 @@ import XCTest
 
 final class ImagesCSVParserTests: AbstractXCTestCase {
     func testParseImages_CleanFile() {
-        let cleanFile = getURLInResources(path: "Images/clean_images", ext: .csv)
+        let cleanFile = getResourceURL(path: "Images/clean_images", ext: .csv)
 
         let names = ["github", "swift"]
         let widths = [24, nil]
@@ -32,7 +32,7 @@ final class ImagesCSVParserTests: AbstractXCTestCase {
     }
 
     func testParseImages_WrongFileWithNoDimensionsError() {
-        let wrongFile = getURLInResources(path: "Images/wrong_images_no_dimensions", ext: .csv)
+        let wrongFile = getResourceURL(path: "Images/wrong_images_no_dimensions", ext: .csv)
 
         XCTAssertThrowsError(try ImagesCSVParser(path: wrongFile.path)) { error in
             XCTAssertEqual(error as? ImagesParserError, ImagesParserError.noDimensions)
@@ -40,7 +40,7 @@ final class ImagesCSVParserTests: AbstractXCTestCase {
     }
 
     func testParseImages_WrongFileWithBadDimensionsError() {
-        let wrongFile = getURLInResources(path: "Images/wrong_images_bad_dimensions", ext: .csv)
+        let wrongFile = getResourceURL(path: "Images/wrong_images_bad_dimensions", ext: .csv)
 
         XCTAssertThrowsError(try ImagesCSVParser(path: wrongFile.path)) { error in
             XCTAssertEqual(error as? ImagesParserError, ImagesParserError.badDimensions)

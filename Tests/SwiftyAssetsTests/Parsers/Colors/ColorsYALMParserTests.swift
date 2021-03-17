@@ -10,7 +10,7 @@ import XCTest
 
 final class ColorsYALMParserTests: AbstractXCTestCase {
     func testParseColors_CleanFile() {
-        let cleanFile = getURLInResources(path: "Colors/clean_colors", ext: .yaml)
+        let cleanFile = getResourceURL(path: "Colors/clean_colors", ext: .yaml)
 
         let names = ["primary", "secondary"]
         let lightColors = ["#c9121e", "#c9121e"]
@@ -36,7 +36,7 @@ final class ColorsYALMParserTests: AbstractXCTestCase {
     }
 
     func testParseColors_WrongFileWithBadHex() {
-        let wrongFile = getURLInResources(path: "Colors/wrong_colors", ext: .yaml)
+        let wrongFile = getResourceURL(path: "Colors/wrong_colors", ext: .yaml)
 
         XCTAssertThrowsError(try ColorsYAMLParser(path: wrongFile.path)) { error in
             XCTAssertEqual(error as? ColorParserError, ColorParserError.badHex)

@@ -10,7 +10,7 @@ import XCTest
 
 final class ImagesYAMLParserTests: AbstractXCTestCase {
     func testParseImages_CleanFile() {
-        let cleanFile = getURLInResources(path: "Images/clean_images", ext: .yaml)
+        let cleanFile = getResourceURL(path: "Images/clean_images", ext: .yaml)
 
         let names = ["github", "swift"]
         let widths = [24, nil]
@@ -35,7 +35,7 @@ final class ImagesYAMLParserTests: AbstractXCTestCase {
     }
 
     func testParseImages_WrongFileWithNoDimensionsError() {
-        let wrongFile = getURLInResources(path: "Images/wrong_images_no_dimensions", ext: .yaml)
+        let wrongFile = getResourceURL(path: "Images/wrong_images_no_dimensions", ext: .yaml)
 
         XCTAssertThrowsError(try ImagesYAMLParser(path: wrongFile.path)) { error in
             XCTAssertEqual(error as? ImagesParserError, ImagesParserError.noDimensions)
@@ -43,7 +43,7 @@ final class ImagesYAMLParserTests: AbstractXCTestCase {
     }
 
     func testParseImagesWithWrongFileWithBadDimensionsError() {
-        let wrongFile = getURLInResources(path: "Images/wrong_images_bad_dimensions", ext: .yaml)
+        let wrongFile = getResourceURL(path: "Images/wrong_images_bad_dimensions", ext: .yaml)
 
         XCTAssertThrowsError(try ImagesYAMLParser(path: wrongFile.path)) { error in
             XCTAssertEqual(error as? ImagesParserError, ImagesParserError.badDimensions)

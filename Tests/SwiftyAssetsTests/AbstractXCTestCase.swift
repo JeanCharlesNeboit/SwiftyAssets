@@ -18,8 +18,16 @@ class AbstractXCTestCase: XCTestCase {
         return testsDirectory.appendingPathComponent("Resources")
     }
 
-    func getURLInResources(path: String, ext: Extension) -> URL {
+    func getResourceURL(path: String, ext: Extension) -> URL {
         return resourcesDirectory.appendingPathComponent(path).appendingPathExtension(ext.withoutDot)
+    }
+    
+    func getResourceURLString(path: String, ext: Extension) -> String {
+        return resourcesDirectory
+            .appendingPathComponent(path)
+            .appendingPathExtension(ext.withoutDot)
+            .absoluteString
+            .replacingOccurrences(of: "file://", with: "")
     }
 
     /// Returns path to the built products directory.

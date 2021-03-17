@@ -10,7 +10,7 @@ import XCTest
 
 final class StringsYAMLParserTests: AbstractXCTestCase {
     func testParseStrings_CleanFile() {
-        let cleanFile = getURLInResources(path: "Strings/clean_strings", ext: .yaml)
+        let cleanFile = getResourceURL(path: "Strings/clean_strings", ext: .yaml)
         
         let expected = ["en_GB": [("apple", "Apple"), ("coffee", "Coffee")],
                         "fr_FR": [("apple", "Pomme"), ("coffee", "Café")]]

@@ -10,7 +10,7 @@ import TSCBasic
 import TSCUtility
 
 public struct CommandRegistry {
-    private let parser: ArgumentParser
+    let parser: ArgumentParser
     private var commands: [Command] = []
 
     public init(usage: String, overview: String) {

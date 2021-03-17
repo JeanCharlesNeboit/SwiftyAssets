@@ -7,6 +7,8 @@
 
 import Foundation
 import TSCUtility
+import PathKit
+import Stencil
 
 class ColorsGenerator: AssetsGenerator {
     // MARK: - Properties
@@ -75,44 +77,15 @@ class ColorsGenerator: AssetsGenerator {
     
     private func generateSwiftFile(colors: [ColorSet]) throws {
         let filename = "SwiftyColors"
-        
-        var lines = [
-            "",
-            "import UIKit",
-            "",
-            "// swiftlint:disable force_unwrapping",
-            "extension \(CommandLineTool.name) {",
-            "\tclass Colors {"
+        let context: [String: Any] = [
+            "projectName": CommandLineTool.name,
+            "date": DateFormatter(format: "dd/MM/yyyy").string(from: Date()),
+            "colors": colors
         ]
         
-        colors.enumerated().forEach { iterator in
-            let color = iterator.element
-            let offset = iterator.offset
-            
-            guard !color.name.isEmpty else { return }
-            
-            if color.name.starts(with: "//") {
-                lines.append("\(String(repeating: "\t", count: 2))\(color.name.replacingOccurrences(of: "//", with: "// MARK: -"))")
-            } else {
-                lines.append(contentsOf: [
-                    "\(String(repeating: "\t", count: 2))static var \(color.name): UIColor {",
-                    "\(String(repeating: "\t", count: 3))return UIColor(named: \"\(color.name)\")!",
-                    "\(String(repeating: "\t", count: 2))}"
-                ])
-                
-                if offset != colors.count - 1 {
-                    lines.append("")
-                }
-            }
-        }
-        
-        lines.append(contentsOf: [
-            "\t}",
-            "}",
-            "// swiftlint:enable force_unwrapping"
-        ])
-        
-        let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
-        try fileGenerator.generate(atPath: output)
+        let environment = Environment(loader: FileSystemLoader(paths: [Path(FileManager.default.templateDirectoryString)]))
+        let rendered = try environment.renderTemplate(name: "colors.stencil", context: context)
+        let filePath = "\(output)/\(filename)\(Extension.swift.rawValue)"
+        FileManager.default.createFile(atPath: filePath, contents: rendered.data(using: .utf8), attributes: nil)
     }
 }
