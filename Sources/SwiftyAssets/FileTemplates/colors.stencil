@@ -12,11 +12,16 @@ import UIKit
 // swiftlint:disable force_unwrapping
 extension SwiftyAssets {
     class UIColors {
+        {% filter removeExtraNewLines %}
         {% for color in colors %}
         static var {{ color.name }}: UIColor {
             return UIColor(named: "{{ color.name }}")!
         }
+        {% ifnot forloop.last %}
+        {% removeExtraNewLinesForceNewLine %}
+        {% endif %}
         {% endfor %}
+        {% endfilter %}
     }
 }
 // swiftlint:enable force_unwrapping
@@ -25,13 +30,19 @@ extension SwiftyAssets {
 #if canImport(SwiftUI)
 import SwiftUI
 
+@available(iOS 13.0, *)
 extension SwiftyAssets {
     class Colors {
+        {% filter removeExtraNewLines %}
         {% for color in colors %}
         static var {{ color.name }}: Color {
             return Color("{{ color.name }}")
         }
+        {% ifnot forloop.last %}
+        {% removeExtraNewLinesForceNewLine %}
+        {% endif %}
         {% endfor %}
+        {% endfilter %}
     }
 }
 #endif

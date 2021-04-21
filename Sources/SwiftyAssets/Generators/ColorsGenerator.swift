@@ -76,16 +76,8 @@ class ColorsGenerator: AssetsGenerator {
     }
     
     private func generateSwiftFile(colors: [ColorSet]) throws {
-        let filename = "SwiftyColors"
-        let context: [String: Any] = [
-            "projectName": CommandLineTool.name,
-            "date": DateFormatter(format: "dd/MM/yyyy").string(from: Date()),
+        try generateSwiftFile(templateFile: "colors.stencil", filename: "SwiftyColors", additionalContext: [
             "colors": colors
-        ]
-        
-        let environment = Environment(loader: FileSystemLoader(paths: [Path(FileManager.default.templateDirectoryString)]))
-        let rendered = try environment.renderTemplate(name: "colors.stencil", context: context)
-        let filePath = "\(output)/\(filename)\(Extension.swift.rawValue)"
-        FileManager.default.createFile(atPath: filePath, contents: rendered.data(using: .utf8), attributes: nil)
+        ])
     }
 }

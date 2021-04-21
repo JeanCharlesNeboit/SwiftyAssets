@@ -7,6 +7,8 @@
 
 import Foundation
 
+let log = LoggerService.shared
+
 class LoggerService {
     static let shared = LoggerService()
     

@@ -7,13 +7,25 @@
 
 import Foundation
 import TSCUtility
+import Stencil
+import PathKit
 
 class AssetsGenerator {
+    // MARK: - Properties
     let command: AssetsCommand
     let result: ArgumentParser.Result
     let input: String
     let output: String
     
+    var projectName: String {
+        command.projectName(in: result) ?? ""
+    }
+    
+    var copyright: String {
+        command.copyright(in: result)
+    }
+    
+    // MARK: - Initialization
     init?(result: ArgumentParser.Result, assetsCommand: AssetsCommand) throws {
         guard let inputArg = result.get(assetsCommand.inputPositional) else {
             return nil
@@ -34,9 +46,8 @@ class AssetsGenerator {
         self.output = outputArg
     }
     
+    // MARK: -
     func getFileHeader(additionalLines: [String]? = nil) -> FileHeader {
-        let projectName = command.projectName(in: result)
-        let copyright = command.copyright(in: result)
         return FileHeader(projectName: projectName, copyright: copyright, additionalLines: additionalLines)
     }
     
@@ -58,5 +69,25 @@ class AssetsGenerator {
     
     func generate() throws {
         try createAssetsClassFile()
+    }
+    
+    // MARK: -
+    #warning("Create protocol and call generateSwiftFile directly in generate")
+    func generateSwiftFile(templateFile: String, filename: String, additionalContext: [String: Any]) throws {
+        var context: [String: Any] = [
+            "projectName": projectName,
+            "date": DateFormatter(format: "dd/MM/yyyy").string(from: Date()),
+        ]
+        context += additionalContext
+        
+        let ext = Stencil.Extension()
+        ext.registerCustomExtensions()
+        
+        let environment = Environment(loader: FileSystemLoader(paths: [Path(FileManager.default.templateDirectoryString)]), extensions: [ext])
+        let rendered = try environment.renderTemplate(name: templateFile, context: context)
+        let filePath = "\(output)/\(filename)\(Extension.swift.rawValue)"
+        
+        #warning("Create file if needed")
+        FileManager.default.createFile(atPath: filePath, contents: rendered.data(using: .utf8), attributes: nil)
     }
 }

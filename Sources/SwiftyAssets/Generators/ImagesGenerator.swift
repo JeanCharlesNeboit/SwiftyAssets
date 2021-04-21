@@ -142,39 +142,8 @@ class ImagesGenerator: AssetsGenerator {
     }
     
     private func generateSwiftFile(images: [ImageSet]) throws {
-        let filename = "SwiftyImages"
-        
-        var lines = [
-            "",
-            "import UIKit",
-            "",
-            "// swiftlint:disable force_unwrapping",
-            "extension \(CommandLineTool.name) {",
-            "\tclass Images {"
-        ]
-        
-        for image in images {
-            guard !image.name.isEmpty else { return }
-            
-            if image.name.starts(with: "//") {
-                lines.append("\(String(repeating: "\t", count: 2))\(image.name.replacingOccurrences(of: "//", with: "// MARK: -"))")
-            } else {
-                lines.append(contentsOf: [
-                    "\(String(repeating: "\t", count: 2))static var \(image.name): UIImage {",
-                    "\(String(repeating: "\t", count: 3))return UIImage(named: \"\(image.name)\")!",
-                    "\(String(repeating: "\t", count: 2))}",
-                    ""
-                ])
-            }
-        }
-        
-        lines.append(contentsOf: [
-            "\t}",
-            "}",
-            "// swiftlint:enable force_unwrapping"
+        try generateSwiftFile(templateFile: "images.stencil", filename: "SwiftyImages", additionalContext: [
+            "images": images
         ])
-        
-        let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
-        try fileGenerator.generate(atPath: output)
     }
 }

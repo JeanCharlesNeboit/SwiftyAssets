@@ -7,11 +7,14 @@
 
 import Foundation
 
-typealias FontFamily = String
+struct FontFamily {
+    let name: String
+    let fonts: [Font]
+}
 
 class FontsParser {
-    private(set) var fontsGroupedByFamily: [FontFamily: [Font]] = [:]
-
+    private(set) var fontFamilies = [FontFamily]()
+    
     init(path: String) throws {
         try parseFonts(path: path)
     }
@@ -32,7 +35,10 @@ class FontsParser {
                 }
             }
 
-            self.fontsGroupedByFamily = Dictionary(grouping: fonts, by: { $0.family })
+            fontFamilies = Dictionary(grouping: fonts, by: { $0.family })
+                .map { name, fonts in
+                    FontFamily(name: name.removeWhitespaces(), fonts: fonts)
+                }
         }
     }
 }

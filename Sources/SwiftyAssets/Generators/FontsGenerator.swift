@@ -7,10 +7,12 @@
 
 import Foundation
 import TSCUtility
+import Stencil
+import PathKit
 
 class FontsGenerator: AssetsGenerator {
     // MARK: - Properties
-    private var fontsGroupedByFamily: [FontFamily: [Font]] = [:]
+    private var fontFamilies = [FontFamily]()
     private var plistPath: String?
     
     // MARK: - Initialization
@@ -26,86 +28,21 @@ class FontsGenerator: AssetsGenerator {
         guard let parser = try? FontsParser(path: input) else {
             return
         }
-        fontsGroupedByFamily = parser.fontsGroupedByFamily
+        fontFamilies = parser.fontFamilies
     }
     
     // MARK: - Generation
     override func generate() throws {
         try super.generate()
         
-        try createSwiftFile(fonts: fontsGroupedByFamily)
-        try addFontsToPList(fonts: fontsGroupedByFamily.flatMap({ dict in
-            return dict.value
-        }))
+        try createSwiftFile(fonts: fontFamilies)
+        try addFontsToPList(fonts: fontFamilies.flatMap { $0.fonts })
     }
     
-    private func createSwiftFile(fonts: [FontFamily: [Font]]) throws {
-        let filename = "SwiftyFonts"
-        let path = "\(output)"
-
-        var lines = [
-            "",
-            "import Foundation",
-            "",
-            "// swiftlint:disable force_unwrapping nesting",
-            "protocol SwiftyAssetsFontProtocol {",
-            "\tvar postScriptName: String { get }",
-            "}",
-            "",
-            "extension \(CommandLineTool.name) {",
-            "\tclass Font {"
-        ]
-        
-        for (i, family) in fonts.keys.enumerated() {
-            if let fonts = fonts[family] {
-                lines.append("\((i == 0) ? "" : "\n")\(String(repeating: "\t", count: 2))enum \(family.removeWhitespaces()): String, SwiftyAssetsFontProtocol {")
-                for font in fonts {
-                    lines.append(contentsOf: [
-                        "\(String(repeating: "\t", count: 3))case \(font.style.removeWhitespaces().lowercasedFirst()) = \"\(font.postScriptName)\""
-                    ])
-                }
-                lines.append(contentsOf: [
-                    "",
-                    "\(String(repeating: "\t", count: 3))var postScriptName: String {",
-                    "\(String(repeating: "\t", count: 4))return self.rawValue",
-                    "\(String(repeating: "\t", count: 3))}",
-                    "\(String(repeating: "\t", count: 2))}"
-                ])
-            }
-        }
-
-        lines.append(contentsOf: [
-            "\t}",
-            "}",
-            "",
-            "#if canImport(UIKit)",
-            "import UIKit",
-            "",
-            "extension SwiftyAssetsFontProtocol {",
-            "\(String(repeating: "\t", count: 1))func font(withSize size: CGFloat) -> UIFont {",
-            "\(String(repeating: "\t", count: 2))return UIFont(name: self.postScriptName, size: size)!",
-            "\(String(repeating: "\t", count: 1))}",
-            "}",
-            "#endif",
-            "",
-            "#if canImport(SwiftUI)",
-            "import SwiftUI",
-            "",
-            "extension SwiftyAssetsFontProtocol {",
-            "\(String(repeating: "\t", count: 1))func font(withSize size: CGFloat) -> Font {",
-            "\(String(repeating: "\t", count: 2))return Font.custom(self.postScriptName, size: size)",
-            "\(String(repeating: "\t", count: 1))}",
-            "",
-            "\(String(repeating: "\t", count: 1))func font(withSize size: CGFloat, relativeTo style: Font.TextStyle) -> Font {",
-            "\(String(repeating: "\t", count: 2))return Font.custom(self.postScriptName, size: size, relativeTo: style)",
-            "\(String(repeating: "\t", count: 1))}",
-            "}",
-            "#endif",
-            "// swiftlint:enable force_unwrapping nesting",
+    private func createSwiftFile(fonts: [FontFamily]) throws {
+        try generateSwiftFile(templateFile: "fonts.stencil", filename: "SwiftyFonts", additionalContext: [
+            "fontFamilies": fonts
         ])
-        
-        let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
-        try fileGenerator.generate(atPath: path)
     }
 
     private func addFontsToPList(fonts: [Font]) throws {
@@ -125,7 +62,7 @@ class FontsGenerator: AssetsGenerator {
         do {
             try plistService.write(dict: dictionary)
         } catch let error {
-            LoggerService.shared.error(message: error.localizedDescription)
+            log.error(message: error.localizedDescription)
         }
     }
 }

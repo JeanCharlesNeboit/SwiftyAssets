@@ -13,3 +13,11 @@ extension Collection {
         return indices.contains(index) ? self[index] : nil
     }
 }
+
+extension Dictionary where Key == String, Value == Any {
+    static func += (lhs: inout [String:Any], rhs: [String:Any]) {
+        for (key, value) in rhs {
+            lhs.updateValue(value, forKey: key)
+        }
+    }
+}
