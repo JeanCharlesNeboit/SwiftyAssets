@@ -39,7 +39,7 @@ extension AssetsCommand {
     }
 
     func copyright(in result: ArgumentParser.Result) -> String {
-        var defaultCopyright = "Copyright © 2020"
+        var defaultCopyright = "Copyright © \(DateFormatter(format: "yyyy").string(from: Date()))"
         
         if let projectName = projectName(in: result) {
             defaultCopyright.append(contentsOf: ", \(projectName)")

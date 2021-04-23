@@ -17,6 +17,8 @@ enum Extension: String {
     case imageset = ".imageset"
     case yaml = ".yml"
     case csv = ".csv"
+    case png = ".png"
+    case svg = ".svg"
 
     var withoutDot: String {
         return rawValue.replacingOccurrences(of: ".", with: "")

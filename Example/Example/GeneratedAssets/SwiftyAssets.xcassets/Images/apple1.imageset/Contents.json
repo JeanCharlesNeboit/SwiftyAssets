@@ -5,19 +5,8 @@
 	},
 	"images" : [
 		{
-			"filename" : "apple1@1x.png",
-			"idiom" : "universal",
-			"scale" : "1x"
-		},
-		{
-			"filename" : "apple1@2x.png",
-			"idiom" : "universal",
-			"scale" : "2x"
-		},
-		{
-			"filename" : "apple1@3x.png",
-			"idiom" : "universal",
-			"scale" : "3x"
+			"filename" : "apple1..svg",
+			"idiom" : "universal"
 		}
 	]
 }

@@ -13,14 +13,14 @@ class ImagesCSVParser: CSVParser {
     override init(path: String) throws {
         try super.init(path: path)
         
-        for namedRow in csv.namedRows {
-            if let name = namedRow[ImageKeys.name.rawValue],
-                let width = namedRow[ImageKeys.width.rawValue],
-                let height = namedRow[ImageKeys.height.rawValue] {
-                if let imageSet = try ImageSet(name: name, width: width, height: height) {
-                    images.append(imageSet)
-                }
-            }
-        }
+//        for namedRow in csv.namedRows {
+//            if let name = namedRow[ImageKeys.name.rawValue],
+//                let width = namedRow[ImageKeys.width.rawValue],
+//                let height = namedRow[ImageKeys.height.rawValue] {
+//                if let imageSet = try ImageSet(name: name, format: "png", width: width, height: height) {
+//                    images.append(imageSet)
+//                }
+//            }
+//        }
     }
 }

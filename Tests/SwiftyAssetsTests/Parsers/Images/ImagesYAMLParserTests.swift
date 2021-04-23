@@ -9,44 +9,97 @@ import XCTest
 @testable import SwiftyAssets
 
 final class ImagesYAMLParserTests: AbstractXCTestCase {
-    func testParseImages_CleanFile() {
-        let cleanFile = getResourceURL(path: "Images/clean_images", ext: .yaml)
+    // MARK: - Tests
+    func testParseSingleImage() throws {
+        // Given
+        let sut = try ImagesYAMLParser(yaml: """
+        github:
+            width: 24
+        """)
+        
+        // When
+        let image = sut.images.first!
+        
+        // Then
+        XCTAssertEqual(sut.images.count, 1)
+        XCTAssertEqual(image.name, "github")
+        XCTAssertEqual(image.format, .png)
+        XCTAssertEqual(image.width, 24)
+        XCTAssertEqual(image.height, nil)
+    }
+    
+    func testParseMultipleImages() throws {
+        // Given
+        let sut = try ImagesYAMLParser(yaml: """
+        iPhone:
+            width: 24
 
-        let names = ["github", "swift"]
-        let widths = [24, nil]
-        let heights = [nil, 24]
-
-        do {
-            sleep(1)
-            let sut = try ImagesYAMLParser(path: cleanFile.path)
-
-            var images = sut.images
-            images.sort { (lhs, rhs) -> Bool in lhs.name < rhs.name }
-
-            XCTAssertEqual(images.count, 2)
-            for (i, image) in images.enumerated() {
-                XCTAssertEqual(image.name, names[i])
-                XCTAssertEqual(image.width, widths[i])
-                XCTAssertEqual(image.height, heights[i])
+        iPad:
+            height: 48
+        """)
+        
+        // When
+        // sut.images is not ordered like in yaml declaration
+        let iPhoneImage = sut.images.first(where: { $0.name == "iPhone" })!
+        let iPadImage = sut.images.first(where: { $0.name == "iPad" })!
+        
+        // Then
+        XCTAssertEqual(sut.images.count, 2)
+        XCTAssertEqual(iPhoneImage.format, .png)
+        XCTAssertEqual(iPadImage.format, .png)
+        XCTAssertEqual(iPhoneImage.width, 24)
+        XCTAssertEqual(iPadImage.height, 48)
+        XCTAssertEqual(iPhoneImage.height, nil)
+        XCTAssertEqual(iPadImage.width, nil)
+    }
+    
+    func testParseNegativeSize() {
+        // Given
+        XCTAssertThrowsError(try ImagesYAMLParser(yaml: """
+        iPhone:
+            width: -1
+        """)) { error in
+            var assert = false
+            if case ImagesParserError.badDimensions = error {
+                assert = true
             }
-        } catch {
-            XCTFail(error.localizedDescription)
+            XCTAssertTrue(assert)
         }
     }
-
-    func testParseImages_WrongFileWithNoDimensionsError() {
-        let wrongFile = getResourceURL(path: "Images/wrong_images_no_dimensions", ext: .yaml)
-
-        XCTAssertThrowsError(try ImagesYAMLParser(path: wrongFile.path)) { error in
-            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.noDimensions)
-        }
+    
+    func testParseSingleImageAsSVG() throws {
+        // Given
+        let sut = try ImagesYAMLParser(yaml: """
+        github:
+            format: svg
+        """)
+        
+        // When
+        let image = sut.images.first!
+        
+        // Then
+        XCTAssertEqual(sut.images.count, 1)
+        XCTAssertEqual(image.name, "github")
+        XCTAssertEqual(image.format, .svg)
+        XCTAssertEqual(image.width, nil)
+        XCTAssertEqual(image.height, nil)
     }
+    
 
-    func testParseImagesWithWrongFileWithBadDimensionsError() {
-        let wrongFile = getResourceURL(path: "Images/wrong_images_bad_dimensions", ext: .yaml)
-
-        XCTAssertThrowsError(try ImagesYAMLParser(path: wrongFile.path)) { error in
-            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.badDimensions)
-        }
-    }
+//    func testParseImages_WrongFileWithNoDimensionsError() {
+//        let wrongFile = getResourceURL(path: "Images/wrong_images_no_dimensions", ext: .yaml)
+//
+//        XCTAssertThrowsError(try ImagesYAMLParser(path: wrongFile.path)) { error in
+//            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.noDimensions)
+//        }
+//    }
+//
+//    func testParseImagesWithWrongFileWithBadDimensionsError() {
+//        XCTAssertThrowsError(try ImagesYAMLParser(yaml: """
+//        github:
+//        """)
+//        ) { error in
+//            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.badDimensions)
+//        }
+//    }
 }

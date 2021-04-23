@@ -7,49 +7,87 @@
 
 import Foundation
 
-struct ImageSet {
-    let name: String
-    let width: Int?
-    let height: Int?
+enum ImageRenderingFormat: String {
+    case png
+    case svg
     
-    init?(name: String, width: String?, height: String?) throws {
-        guard width?.notEmptyOrNil != nil || height?.notEmptyOrNil != nil else {
-            throw ImagesParserError.noDimensions
+    var fileExtension: Extension {
+        switch self {
+        case .png:
+            return .png
+        case .svg:
+            return .svg
         }
-        
-        guard width?.isNumeric == true || width?.notEmptyOrNil == nil,
-            height?.isNumeric == true || height?.notEmptyOrNil == nil else {
-            throw ImagesParserError.badDimensions
-        }
+    }
+}
 
-        let _width = Int(width ?? "") ?? nil
-        let _height = Int(height ?? "") ?? nil
-        
-        self.name = name
-        self.width = _width
-        self.height = _height
+struct ImageSet {
+    // MARK: - Properties
+    let name: String
+    private(set) var format: ImageRenderingFormat = .png
+    private(set) var width: Int?
+    private(set) var height: Int?
+    
+    var isSingleScale: Bool {
+        format == .svg
     }
     
-    func name(with scale: Scale) -> String {
+    // MARK: - Initialization
+    init(name: String, format formatString: String?, width: Int?, height: Int?) throws {
+        if let rawValue = formatString,
+           let format = ImageRenderingFormat(rawValue: rawValue) {
+            self.format = format
+        }
+        
+        if format == .png,
+            width == nil && height == nil {
+            throw ImagesParserError.noDimensions(key: name)
+        }
+        
+        if let width = width,
+           width <= 0 {
+            throw ImagesParserError.badDimensions
+        }
+        
+        if let height = height,
+           height <= 0 {
+            throw ImagesParserError.badDimensions
+        }
+        
+        self.name = name
+        self.width = width
+        self.height = height
+    }
+    
+    // MARK: -
+    func formattedName(with scale: Scale? = nil) -> String {
+        guard let scale = scale else { return name }
         return "\(name)@\(scale.name)"
     }
     
     func json(ext: String) -> [String] {
         var lines: [String] = ["\(String(repeating: "\t", count: 1))\"images\" : ["]
         
-        for (i, scale) in ImageSet.Scale.allCases.enumerated() {
+        if isSingleScale {
             lines.append("\(String(repeating: "\t", count: 2)){")
-            lines.append("\(String(repeating: "\t", count: 3))\"filename\" : \"\(name(with: scale)).\(ext)\",")
-            lines.append("\(String(repeating: "\t", count: 3))\"idiom\" : \"universal\",")
-            lines.append("\(String(repeating: "\t", count: 3))\"scale\" : \"\(scale.name)\"")
-            
-            if i != ImageSet.Scale.allCases.count - 1 {
-                lines.append("\(String(repeating: "\t", count: 2))},")
-            } else {
-                lines.append("\(String(repeating: "\t", count: 2))}")
+            lines.append("\(String(repeating: "\t", count: 3))\"filename\" : \"\(name)\(ext)\",")
+            lines.append("\(String(repeating: "\t", count: 3))\"idiom\" : \"universal\"")
+            lines.append("\(String(repeating: "\t", count: 2))}")
+        } else {
+            for (i, scale) in ImageSet.Scale.allCases.enumerated() {
+                lines.append("\(String(repeating: "\t", count: 2)){")
+                lines.append("\(String(repeating: "\t", count: 3))\"filename\" : \"\(formattedName(with: scale))\(ext)\",")
+                lines.append("\(String(repeating: "\t", count: 3))\"idiom\" : \"universal\",")
+                lines.append("\(String(repeating: "\t", count: 3))\"scale\" : \"\(scale.name)\"")
+                
+                if i != ImageSet.Scale.allCases.count - 1 {
+                    lines.append("\(String(repeating: "\t", count: 2))},")
+                } else {
+                    lines.append("\(String(repeating: "\t", count: 2))}")
+                }
             }
         }
-        
+    
         lines.append("\(String(repeating: "\t", count: 1))]")
         return lines
     }

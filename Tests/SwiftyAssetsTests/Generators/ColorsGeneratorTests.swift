@@ -22,13 +22,21 @@ final class ColorsGeneratorTests: AbstractXCTestCase {
         let parser = commandRegistry.parser
         
         let input = getResourceURL(path: "Colors/clean_colors", ext: .yaml).path
-        let result = try! parser.parse(["colors", input, "output ."])
+        let result = try! parser.parse(["colors", input, ".", "--project-name", "SwiftyAssetsTests"])
         
-        sut = try! ColorsGenerator(result: result, command: .init(parser: parser))
+        sut = try! ColorsGenerator(result: result, command: .init(parser: parser), underTest: true)
     }
     
     // MARK: - Tests
     func testColorsGeneration() {
+        // Given
         try! sut.generate()
+        
+        // When
+        
+        // Expect
+        print(sut.generatedFileContent)
+        XCTAssertEqual(sut.colors.count, 2)
+        XCTAssertNotEqual(sut.generatedFileContent, "")
     }
 }

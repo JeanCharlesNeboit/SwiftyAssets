@@ -17,7 +17,8 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-tools-support-core.git", from: "0.1.10"),
         .package(url: "https://github.com/swiftcsv/SwiftCSV.git", from: "0.5.5"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "3.0.0"),
-        .package(url: "https://github.com/stencilproject/Stencil", from: "0.14.0")
+        .package(url: "https://github.com/stencilproject/Stencil", from: "0.14.0"),
+        .package(url: "git@github.com:JeanCharlesNeboit/SwiftyKit.git", .revision("c3cb0b1"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -28,12 +29,14 @@ let package = Package(
                 "SwiftToolsSupport-auto",
                 "SwiftCSV",
                 "Yams",
-                "Stencil"
+                "Stencil",
+                "SwiftyKit"
             ]
         ),
         .target(
             name: "SwiftyAssetsCLI",
-            dependencies: ["SwiftyAssets"]),
+            dependencies: ["SwiftyAssets"]
+        ),
         .testTarget(
             name: "SwiftyAssetsTests",
             dependencies: ["SwiftyAssets"]

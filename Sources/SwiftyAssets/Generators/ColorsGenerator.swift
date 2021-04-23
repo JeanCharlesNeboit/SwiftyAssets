@@ -12,12 +12,12 @@ import Stencil
 
 class ColorsGenerator: AssetsGenerator {
     // MARK: - Properties
-    private var colors = [ColorSet]()
+    private(set) var colors = [ColorSet]()
     private var inputFileType: InputFileType = .yaml
     
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, command: ColorsCommand) throws {
-        try super.init(result: result, assetsCommand: command)
+    init?(result: ArgumentParser.Result, command: ColorsCommand, underTest: Bool = false) throws {
+        try super.init(result: result, assetsCommand: command, underTest: underTest)
         
         if let option = result.get(command.inputFileTypeOption),
             let ext = InputFileType(ext: option) {
@@ -61,22 +61,17 @@ class ColorsGenerator: AssetsGenerator {
     }
     
     private func generateColorset(for color: ColorSet, in folder: String) throws {
-        let filename = "Contents"
-
-        var info = AssetsSet.info
-        info.appendToLast(newElement: ",")
+        let content = Environment.getContent(templateName: "asset_contents", context: [
+            "content": color.json.joined(separator: "\n")
+        ])
         
-        var lines = ["{"]
-        lines.append(contentsOf: info)
-        lines.append(contentsOf: color.json)
-        lines.append("}")
-        
-        let fileGenerator = FileGenerator(filename: filename, ext: .json, fileHeader: nil, lines: lines)
-        try fileGenerator.generate(atPath: folder)
+        if !underTest {
+            FileGenerator.generate(atPath: folder, filename: "Contents", ext: .json, content: content)
+        }
     }
     
     private func generateSwiftFile(colors: [ColorSet]) throws {
-        try generateSwiftFile(templateFile: "colors.stencil", filename: "SwiftyColors", additionalContext: [
+        try generateSwiftFile(templateName: "colors", filename: "SwiftyColors", additionalContext: [
             "colors": colors
         ])
     }

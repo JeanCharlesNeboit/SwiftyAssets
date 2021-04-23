@@ -31,19 +31,19 @@ final class ImagesCSVParserTests: AbstractXCTestCase {
         }
     }
 
-    func testParseImages_WrongFileWithNoDimensionsError() {
-        let wrongFile = getResourceURL(path: "Images/wrong_images_no_dimensions", ext: .csv)
-
-        XCTAssertThrowsError(try ImagesCSVParser(path: wrongFile.path)) { error in
-            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.noDimensions)
-        }
-    }
-
-    func testParseImages_WrongFileWithBadDimensionsError() {
-        let wrongFile = getResourceURL(path: "Images/wrong_images_bad_dimensions", ext: .csv)
-
-        XCTAssertThrowsError(try ImagesCSVParser(path: wrongFile.path)) { error in
-            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.badDimensions)
-        }
-    }
+//    func testParseImages_WrongFileWithNoDimensionsError() {
+//        let wrongFile = getResourceURL(path: "Images/wrong_images_no_dimensions", ext: .csv)
+//
+//        XCTAssertThrowsError(try ImagesCSVParser(path: wrongFile.path)) { error in
+//            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.noDimensions)
+//        }
+//    }
+//
+//    func testParseImages_WrongFileWithBadDimensionsError() {
+//        let wrongFile = getResourceURL(path: "Images/wrong_images_bad_dimensions", ext: .csv)
+//
+//        XCTAssertThrowsError(try ImagesCSVParser(path: wrongFile.path)) { error in
+//            XCTAssertEqual(error as? ImagesParserError, ImagesParserError.badDimensions)
+//        }
+//    }
 }

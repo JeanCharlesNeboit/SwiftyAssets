@@ -10,12 +10,13 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack(alignment: .center) {
-            #warning("Add SwiftyAssets.Images SwiftUI Image property")
-            Image(uiImage: SwiftyAssets.Images.apple1)
-            #warning("Add SwiftyAssets.Colors SwiftUI Color property")
+            SwiftyAssets.Images.apple1
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 100)
             Text(SwiftyAssets.Strings.think_different)
                 .font(SwiftyAssets.Font.AppleGaramond.regular.font(withSize: 34, relativeTo: .largeTitle))
-                .foregroundColor(Color(SwiftyAssets.Colors.think_different))
+                .foregroundColor(SwiftyAssets.Colors.think_different)
                 .padding()
         }
     }

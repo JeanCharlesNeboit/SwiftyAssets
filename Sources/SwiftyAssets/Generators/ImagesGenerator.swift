@@ -13,16 +13,19 @@ class ImagesGenerator: AssetsGenerator {
     private var imagesFolderPath: String?
     private var imagesPath: [String] = []
     
-    let formatOption = "png"
-    
-    init?(result: ArgumentParser.Result, command: ImagesCommand) throws {
-        try super.init(result: result, assetsCommand: command)
+    init?(result: ArgumentParser.Result, command: ImagesCommand, underTest: Bool = false) throws {
+        try super.init(result: result, assetsCommand: command, underTest: underTest)
         
-        if let csvParser = try? ImagesCSVParser(path: input),
-            images.count != 0 {
-            self.images = csvParser.images
-        } else if let yamlParser = try? ImagesYAMLParser(path: input) {
+//        if let csvParser = try? ImagesCSVParser(path: input),
+//            images.count != 0 {
+//            self.images = csvParser.images
+//        }
+        
+        do {
+            let yamlParser = try ImagesYAMLParser(path: input)
             self.images = yamlParser.images
+        } catch {
+            log.error(message: error.localizedDescription)
         }
         imagesFolderPath = command.imagesFolderPath(in: result)
     }
@@ -63,8 +66,7 @@ class ImagesGenerator: AssetsGenerator {
         
         for image in images {
             guard let imagePath = imagesPath.first(where: { $0.contains("\(image.name)") }),
-                !image.name.isEmpty && !image.name.starts(with: "//"),
-                image.width != nil || image.height != nil else {
+                !image.name.isEmpty && !image.name.starts(with: "//") else {
                 return
             }
             
@@ -82,29 +84,34 @@ class ImagesGenerator: AssetsGenerator {
         var info = AssetsSet.info
         info.appendToLast(newElement: ",")
         
-        ImageSet.Scale.allCases.forEach { scale in
-            var arguments = ["--format", formatOption]
-            
-            if let width = image.width {
-                arguments.append("--width")
-                arguments.append("\(width * scale.multiplier)")
+        let fileExtension = image.format.fileExtension
+        if image.isSingleScale {
+            Process.shell(launchPath: "/bin/cp", arguments: [inputPath, "\(outputPath)/\(image.formattedName())\(fileExtension())"])
+        } else {
+            ImageSet.Scale.allCases.forEach { scale in
+                var arguments = ["--format", fileExtension.withoutDot]
+                
+                if let width = image.width {
+                    arguments.append("--width")
+                    arguments.append("\(width * scale.multiplier)")
+                }
+        
+                if let height = image.height {
+                    arguments.append("--height")
+                    arguments.append("\(height * scale.multiplier)")
+                }
+                
+                arguments.append("\(inputPath)")
+                arguments.append("-o")
+                arguments.append("\(outputPath)/\(image.formattedName(with: scale))\(fileExtension())")
+                
+                generatePNG(with: arguments)
             }
-    
-            if let height = image.height {
-                arguments.append("--height")
-                arguments.append("\(height * scale.multiplier)")
-            }
-            
-            arguments.append("\(inputPath)")
-            arguments.append("-o")
-            arguments.append("\(outputPath)/\(image.name(with: scale)).\(formatOption)")
-            
-            generatePNG(with: arguments)
         }
         
         var lines = ["{"]
         lines.append(contentsOf: info)
-        lines.append(contentsOf: image.json(ext: formatOption))
+        lines.append(contentsOf: image.json(ext: fileExtension()))
         lines.append("}")
         
         let fileGenerator = FileGenerator(filename: filename, ext: .json, fileHeader: nil, lines: lines)
@@ -142,7 +149,7 @@ class ImagesGenerator: AssetsGenerator {
     }
     
     private func generateSwiftFile(images: [ImageSet]) throws {
-        try generateSwiftFile(templateFile: "images.stencil", filename: "SwiftyImages", additionalContext: [
+        try generateSwiftFile(templateName: "images", filename: "SwiftyImages", additionalContext: [
             "images": images
         ])
     }

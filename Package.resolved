@@ -47,6 +47,15 @@
         }
       },
       {
+        "package": "SwiftyKit",
+        "repositoryURL": "git@github.com:JeanCharlesNeboit/SwiftyKit.git",
+        "state": {
+          "branch": "c3cb0b1",
+          "revision": "c3cb0b1452fb557cab403c64be72faa631a55667",
+          "version": null
+        }
+      },
+      {
         "package": "Yams",
         "repositoryURL": "https://github.com/jpsim/Yams.git",
         "state": {

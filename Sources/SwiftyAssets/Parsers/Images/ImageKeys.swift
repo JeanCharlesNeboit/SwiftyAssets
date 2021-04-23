@@ -9,6 +9,7 @@ import Foundation
 
 enum ImageKeys: String {
     case name
+    case format
     case width
     case height
 }

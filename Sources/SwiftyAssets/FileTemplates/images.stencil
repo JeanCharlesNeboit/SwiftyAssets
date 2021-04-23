@@ -11,7 +11,7 @@ import UIKit
 
 // swiftlint:disable force_unwrapping
 extension SwiftyAssets {
-    class Images {
+    class UIImages {
         {% filter removeExtraNewLines %}
         {% for image in images %}
         static var {{ image.name }}: UIImage {
@@ -25,4 +25,24 @@ extension SwiftyAssets {
     }
 }
 // swiftlint:enable force_unwrapping
+#endif
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+@available(iOS 13.0, *)
+extension SwiftyAssets {
+    class Images {
+        {% filter removeExtraNewLines %}
+        {% for image in images %}
+        static var {{ image.name }}: Image {
+            return Image("{{ image.name }}")
+        }
+        {% ifnot forloop.last %}
+        {% removeExtraNewLinesForceNewLine %}
+        {% endif %}
+        {% endfor %}
+        {% endfilter %}
+    }
+}
 #endif

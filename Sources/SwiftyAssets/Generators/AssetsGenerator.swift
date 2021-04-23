@@ -12,10 +12,13 @@ import PathKit
 
 class AssetsGenerator {
     // MARK: - Properties
-    let command: AssetsCommand
     let result: ArgumentParser.Result
+    let command: AssetsCommand
+    let underTest: Bool
     let input: String
     let output: String
+    
+    private(set) var generatedFileContent = ""
     
     var projectName: String {
         command.projectName(in: result) ?? ""
@@ -26,7 +29,7 @@ class AssetsGenerator {
     }
     
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, assetsCommand: AssetsCommand) throws {
+    init?(result: ArgumentParser.Result, assetsCommand: AssetsCommand, underTest: Bool) throws {
         guard let inputArg = result.get(assetsCommand.inputPositional) else {
             return nil
         }
@@ -40,8 +43,9 @@ class AssetsGenerator {
             try FileManager.default.createDirectory(atPath: outputArg, withIntermediateDirectories: true, attributes: nil)
         }
         
-        self.command = assetsCommand
         self.result = result
+        self.command = assetsCommand
+        self.underTest = underTest
         self.input = inputArg
         self.output = outputArg
     }
@@ -73,21 +77,32 @@ class AssetsGenerator {
     
     // MARK: -
     #warning("Create protocol and call generateSwiftFile directly in generate")
-    func generateSwiftFile(templateFile: String, filename: String, additionalContext: [String: Any]) throws {
+    func generateSwiftFile(templateName: String, filename: String, additionalContext: [String: Any]) throws {
         var context: [String: Any] = [
             "projectName": projectName,
             "date": DateFormatter(format: "dd/MM/yyyy").string(from: Date()),
+            "copyright": copyright
         ]
         context += additionalContext
+        generatedFileContent = Environment.getContent(templateName: templateName, context: context)
         
+        if !underTest {
+            FileGenerator.generate(atPath: output, filename: filename, ext: .swift, content: generatedFileContent)
+        }
+    }
+}
+
+extension Environment {
+    static func getContent(templateName: String, context: [String: Any]) -> String {
         let ext = Stencil.Extension()
         ext.registerCustomExtensions()
         
         let environment = Environment(loader: FileSystemLoader(paths: [Path(FileManager.default.templateDirectoryString)]), extensions: [ext])
-        let rendered = try environment.renderTemplate(name: templateFile, context: context)
-        let filePath = "\(output)/\(filename)\(Extension.swift.rawValue)"
-        
-        #warning("Create file if needed")
-        FileManager.default.createFile(atPath: filePath, contents: rendered.data(using: .utf8), attributes: nil)
+        do {
+            return try environment.renderTemplate(name: "\(templateName).stencil", context: context)
+        } catch {
+            log.error(message: error.localizedDescription)
+            return ""
+        }
     }
 }

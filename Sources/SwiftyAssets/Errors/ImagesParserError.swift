@@ -8,17 +8,20 @@
 import Foundation
 
 enum ImagesParserError: Error {
-    case noDimensions
+    case noDimensions(key: String)
     case badDimensions
+    case badFormat(key: String)
 }
 
 extension ImagesParserError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .noDimensions:
-            return NSLocalizedString("Image must at least has width or heigth.", comment: "NoDimensions")
+        case .noDimensions(let key):
+            return "Image must at least has width or heigth, and size must be greater than 0 for key '\(key)'"
         case .badDimensions:
-            return NSLocalizedString("Unable to decode image dimension.", comment: "BadDimensions")
+            return "Unable to decode image dimension."
+        case .badFormat(let key):
+            return "Bad format for image with key '\(key)'"
         }
     }
 }

@@ -16,8 +16,8 @@ class FontsGenerator: AssetsGenerator {
     private var plistPath: String?
     
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, command: FontsCommand) throws {
-        try super.init(result: result, assetsCommand: command)
+    init?(result: ArgumentParser.Result, command: FontsCommand, underTest: Bool = false) throws {
+        try super.init(result: result, assetsCommand: command, underTest: underTest)
         
         plistPath = result.get(command.plistOption)
         parseFonts()
@@ -40,7 +40,7 @@ class FontsGenerator: AssetsGenerator {
     }
     
     private func createSwiftFile(fonts: [FontFamily]) throws {
-        try generateSwiftFile(templateFile: "fonts.stencil", filename: "SwiftyFonts", additionalContext: [
+        try generateSwiftFile(templateName: "fonts", filename: "SwiftyFonts", additionalContext: [
             "fontFamilies": fonts
         ])
     }

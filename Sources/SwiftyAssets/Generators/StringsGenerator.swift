@@ -15,8 +15,8 @@ class StringsGenerator: AssetsGenerator {
     private var inputFileType: InputFileType = .yaml
     
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, command: StringsCommand) throws {
-        try super.init(result: result, assetsCommand: command)
+    init?(result: ArgumentParser.Result, command: StringsCommand, underTest: Bool = false) throws {
+        try super.init(result: result, assetsCommand: command, underTest: underTest)
         
         if let option = result.get(command.inputFileTypeOption),
             let ext = InputFileType(ext: option) {
