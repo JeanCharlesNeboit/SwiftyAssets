@@ -6,33 +6,30 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 
-public class ImagesCommand: AssetsCommand, Command {
+struct ImagesCommand: ParsableCommand, AssetsCommand {
+    static var configuration = CommandConfiguration(
+        commandName: "images",
+        abstract: "A utility for generating images.",
+        version: "1.0.0"
+    )
+    
     // MARK: - Properties
-    public let command: String = "images"
-    public let overview: String = "Generate Images"
+    @Argument(help: "The path of the images input file.")
+    var input: String
     
-    // MARK: - Options
-    private var imagesFolderPathOption: OptionArgument<String>?
+    @Argument(help: "The path where files will be generated.")
+    var output: String
     
-    // MARK: - Initialization
-    public required init(parser: ArgumentParser) {
-        super.init(parser: parser, command: command, overview: overview)
-        imagesFolderPathOption = subparser.addOption(option: .resources)
-    }
+    @Option(name: .shortAndLong, help: "Specify the xcassets folder path.")
+    var resources: String?
+    
+    @OptionGroup var projectOptions: ProjectOptions
     
     // MARK: - Run
-    public func run(with result: ArgumentParser.Result) throws {
-        let generator = try ImagesGenerator(result: result, command: self)
+    public func run() throws {
+        let generator = try ImagesGenerator(command: self)
         try generator?.generate()
-    }
-}
-
-// MARK: - ArgumentParser.Result
-extension ImagesCommand {
-    func imagesFolderPath(in result: ArgumentParser.Result) -> String? {
-        guard let path = imagesFolderPathOption else { return nil }
-        return result.get(path)
     }
 }

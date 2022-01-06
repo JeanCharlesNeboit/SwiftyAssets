@@ -6,21 +6,20 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 import PathKit
 import Stencil
 
-class ColorsGenerator: AssetsGenerator {
+class ColorsGenerator: AssetsGenerator<ColorsCommand> {
     // MARK: - Properties
     private(set) var colors = [ColorSet]()
     private var inputFileType: InputFileType = .yaml
     
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, command: ColorsCommand, underTest: Bool = false) throws {
-        try super.init(result: result, assetsCommand: command, underTest: underTest)
+    override init?(command: ColorsCommand, underTest: Bool = false) throws {
+        try super.init(command: command, underTest: underTest)
         
-        if let option = result.get(command.inputFileTypeOption),
-            let ext = InputFileType(ext: option) {
+        if let ext = InputFileType(ext: command.inputFileType) {
             inputFileType = ext
         }
         parseColors()
@@ -30,11 +29,11 @@ class ColorsGenerator: AssetsGenerator {
     private func parseColors() {
         switch inputFileType {
         case .yaml:
-            if let yamlParser = try? ColorsYAMLParser(path: input) {
+            if let yamlParser = try? ColorsYAMLParser(path: command.input) {
                 self.colors = yamlParser.colors
             }
         case .csv:
-            if let csvParser = try? ColorsCSVParser(path: input) {
+            if let csvParser = try? ColorsCSVParser(path: command.input) {
                 self.colors = csvParser.colors
             }
         }
@@ -47,7 +46,7 @@ class ColorsGenerator: AssetsGenerator {
     }
     
     private func generateColors() throws {
-        let xcassetsPath = "\(output)/\(CommandLineTool.name)\(Extension.xcassets.rawValue)/Colors"
+        let xcassetsPath = "\(command.output)/\(CLI.name)\(Extension.xcassets.rawValue)/Colors"
         
         for color in colors {
             guard !color.name.isEmpty && !color.name.starts(with: "//") else { return }
@@ -66,12 +65,12 @@ class ColorsGenerator: AssetsGenerator {
         ])
         
         if !underTest {
-            FileGenerator.generate(atPath: folder, filename: "Contents", ext: .json, content: content)
+            FileGenerator.generate(atPath: folder, filename: "Contents", fileExtension: .json, content: content)
         }
     }
     
     private func generateSwiftFile(colors: [ColorSet]) throws {
-        try generateSwiftFile(templateName: "colors", filename: "SwiftyColors", additionalContext: [
+        try generateFile(templateName: "colors", filename: "SwiftyColors", additionalContext: [
             "colors": colors
         ])
     }

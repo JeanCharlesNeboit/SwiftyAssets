@@ -6,25 +6,30 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 
-public class StringsCommand: AssetsCommand, Command {
+struct StringsCommand: ParsableCommand, AssetsCommand {
+    static var configuration = CommandConfiguration(
+        commandName: "strings",
+        abstract: "A utility for generating localizable strings.",
+        version: "1.0.0"
+    )
+    
     // MARK: - Properties
-    public let command: String = "strings"
-    public let overview: String = "Generate Localizable Strings"
+    @Argument(help: "The path of the strings input file.")
+    var input: String
     
-    // MARK: - Options
-    public var inputFileTypeOption: OptionArgument<String>?
+    @Argument(help: "The path where files will be generated.")
+    var output: String
     
-    // MARK: - Initialization
-    public required init(parser: ArgumentParser) {
-        super.init(parser: parser, command: command, overview: overview)
-        inputFileTypeOption = subparser.addOption(option: .inputFileType)
-    }
+    @Option(name: .shortAndLong, help: "Specify the input file extension (default 'yaml').")
+    var inputFileType: String = InputFileType.yaml.ext
+    
+    @OptionGroup var projectOptions: ProjectOptions
     
     // MARK: - Run
-    public func run(with result: ArgumentParser.Result) throws {
-        let generator = try StringsGenerator(result: result, command: self)
+    mutating func run() throws {
+        let generator = try StringsGenerator(command: self)
         try generator?.generate()
     }
 }

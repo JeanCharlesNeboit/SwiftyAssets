@@ -6,26 +6,30 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 
-// MARK: - Command
-public class FontsCommand: AssetsCommand, Command {
+struct FontsCommand: ParsableCommand, AssetsCommand {
+    static var configuration = CommandConfiguration(
+        commandName: "fonts",
+        abstract: "A utility for generating fonts.",
+        version: "1.0.0"
+    )
+    
     // MARK: - Properties
-    public let command: String = "fonts"
-    public let overview: String = "Generate Fonts"
+    @Argument(help: "The folder where fonts are located.")
+    var input: String
     
-    // MARK: - Options
-    public var plistOption: OptionArgument<String>?
+    @Argument(help: "The path where files will be generated.")
+    var output: String
     
-    // MARK: - Initialization
-    public required init(parser: ArgumentParser) {
-        super.init(parser: parser, command: command, overview: overview)
-        plistOption = subparser.addOption(option: .plist)
-    }
+    @Option(name: .shortAndLong, help: "Specify the plist file path.")
+    var plist: String?
+    
+    @OptionGroup var projectOptions: ProjectOptions
     
     // MARK: - Run
-    public func run(with result: ArgumentParser.Result) throws {
-        let generator = try FontsGenerator(result: result, command: self)
+    mutating func run() throws {
+        let generator = try FontsGenerator(command: self)
         try generator?.generate()
     }
 }

@@ -10,7 +10,7 @@
 import UIKit
 
 // swiftlint:disable force_unwrapping
-extension SwiftyAssets {
+extension CLI {
     class UIImages {
         static var apple1: UIImage {
             return UIImage(named: "apple1")!
@@ -24,7 +24,7 @@ extension SwiftyAssets {
 import SwiftUI
 
 @available(iOS 13.0, *)
-extension SwiftyAssets {
+extension CLI {
     class Images {
         static var apple1: Image {
             return Image("apple1")

@@ -6,15 +6,15 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 
-class ImagesGenerator: AssetsGenerator {
+class ImagesGenerator: AssetsGenerator<ImagesCommand> {
     private var images = [ImageSet]()
     private var imagesFolderPath: String?
-    private var imagesPath: [String] = []
+    private var imagesUrls: [Foundation.URL] = []
     
-    init?(result: ArgumentParser.Result, command: ImagesCommand, underTest: Bool = false) throws {
-        try super.init(result: result, assetsCommand: command, underTest: underTest)
+    override init?(command: ImagesCommand, underTest: Bool = false) throws {
+        try super.init(command: command, underTest: underTest)
         
 //        if let csvParser = try? ImagesCSVParser(path: input),
 //            images.count != 0 {
@@ -22,26 +22,26 @@ class ImagesGenerator: AssetsGenerator {
 //        }
         
         do {
-            let yamlParser = try ImagesYAMLParser(path: input)
+            let yamlParser = try ImagesYAMLParser(path: command.input)
             self.images = yamlParser.images
         } catch {
             log.error(message: error.localizedDescription)
         }
-        imagesFolderPath = command.imagesFolderPath(in: result)
+        imagesFolderPath = command.resources
     }
     
     override func generate() throws {
         try super.generate()
-        imagesPath = getImagesPaths()
+        imagesUrls = getImagesPaths()
         try generateImages()
     }
     
-    private func getImagesPaths() -> [String] {
-        var paths: [String] = []
+    private func getImagesPaths() -> [Foundation.URL] {
+        var urls: [Foundation.URL] = []
         
         guard let imagesFolderPath = imagesFolderPath,
             let imagesInputURL = URL(string: imagesFolderPath) else {
-                return imagesPath
+                return imagesUrls
         }
         
         if let enumerator = FileManager.default.enumerator(at: imagesInputURL, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
@@ -52,27 +52,27 @@ class ImagesGenerator: AssetsGenerator {
             for case let fileURL as Foundation.URL in enumerator {
                 if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileURL.pathExtension as CFString, nil) {
                     if UTTypeConformsTo(uti.takeRetainedValue(), kUTTypeScalableVectorGraphics) {
-                        paths.append(fileURL.path)
+                        urls.append(fileURL)
                     }
                 }
             }
         }
         
-        return paths
+        return urls
     }
     
     private func generateImages() throws {
-        let xcassetsPath = "\(output)/\(CommandLineTool.name)\(Extension.xcassets.rawValue)/Images"
+        let xcassetsPath = "\(command.output)/\(CLI.name)\(Extension.xcassets.rawValue)/Images"
         
         for image in images {
-            guard let imagePath = imagesPath.first(where: { $0.contains("\(image.name)") }),
+            guard let imagePath = imagesUrls.first(where: { $0.deletingPathExtension().lastPathComponent == "\(image.name)" }),
                 !image.name.isEmpty && !image.name.starts(with: "//") else {
                 return
             }
             
             let imagesetFolder = "\(xcassetsPath)/\(image.name)\(Extension.imageset.rawValue)"
             try FileManager.default.createDirectory(atPath: imagesetFolder, withIntermediateDirectories: true, attributes: nil)
-            try self.generateImageset(with: image, from: imagePath, to: imagesetFolder)
+            try self.generateImageset(with: image, from: imagePath.path, to: imagesetFolder)
         }
         
         try self.generateSwiftFile(images: images)
@@ -149,7 +149,7 @@ class ImagesGenerator: AssetsGenerator {
     }
     
     private func generateSwiftFile(images: [ImageSet]) throws {
-        try generateSwiftFile(templateName: "images", filename: "SwiftyImages", additionalContext: [
+        try generateFile(templateName: "images", filename: "SwiftyImages", additionalContext: [
             "images": images
         ])
     }

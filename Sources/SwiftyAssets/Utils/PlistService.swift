@@ -25,7 +25,7 @@ class PlistService {
 
     // MARK: - PropertyList
     func read() -> [String: Any]? {
-        if let xml = FileManager.default.contents(atPath: path) {
+        if let xml: Data = FileManager.default.contents(atPath: path) {
             return (try? PropertyListSerialization.propertyList(from: xml, options: .mutableContainersAndLeaves, format: nil)) as? [String: Any]
         }
 

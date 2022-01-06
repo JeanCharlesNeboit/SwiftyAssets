@@ -10,7 +10,7 @@
 import UIKit
 
 // swiftlint:disable force_unwrapping
-extension SwiftyAssets {
+extension CLI {
     class UIColors {
         static var think_different: UIColor {
             return UIColor(named: "think_different")!
@@ -24,7 +24,7 @@ extension SwiftyAssets {
 import SwiftUI
 
 @available(iOS 13.0, *)
-extension SwiftyAssets {
+extension CLI {
     class Colors {
         static var think_different: Color {
             return Color("think_different")

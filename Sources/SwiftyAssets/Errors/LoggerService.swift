@@ -22,6 +22,6 @@ class LoggerService {
     }
     
     private func log(type: String, message: String) {
-        print("\(type): [\(CommandLineTool.name)] \(message)")
+        print("\(type): [\(CLI.name)] \(message)")
     }
 }

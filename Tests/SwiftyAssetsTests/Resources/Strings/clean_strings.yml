@@ -5,3 +5,10 @@ apple:
 coffee:
     fr_FR: Café
     en_GB: Coffee
+
+pineapple:
+    fr_FR:
+        other: '%d ananas'
+    en_GB:
+        one: '%d pineapple'
+        other: '%d pineapples'

@@ -6,30 +6,29 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 import SwiftCSV
 
-class StringsGenerator: AssetsGenerator {
+class StringsGenerator: AssetsGenerator<StringsCommand> {
     // MARK: - Properties
     private var localizableStrings = LocalizableStrings()
     private var inputFileType: InputFileType = .yaml
     
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, command: StringsCommand, underTest: Bool = false) throws {
-        try super.init(result: result, assetsCommand: command, underTest: underTest)
+    override init?(command: StringsCommand, underTest: Bool = false) throws {
+        try super.init(command: command, underTest: underTest)
         
-        if let option = result.get(command.inputFileTypeOption),
-            let ext = InputFileType(ext: option) {
+        if let ext = InputFileType(ext: command.inputFileType) {
             inputFileType = ext
         }
-        parseColors()
+        parseStrings()
     }
     
     // MARK: - Parsing
-    private func parseColors() {
+    private func parseStrings() {
         switch inputFileType {
         case .yaml:
-            if let yamlParser = try? StringsYAMLParser(path: input) {
+            if let yamlParser = try? StringsYAMLParser(path: command.input) {
                 self.localizableStrings = yamlParser.localizableStrings
             }
         case .csv:
@@ -53,59 +52,16 @@ class StringsGenerator: AssetsGenerator {
     }
     
     private func createLocalizableFolders(locale: Locale, translations: [Translation]) throws {
-        let filename = "Localizable"
-        let additionalLines = ["Translated in \(locale.flag)"]
-        
-        var lines: [String] = [""]
-        translations.forEach { translation in
-            let key = translation.key
-            if key.isEmpty {
-                lines.append("")
-            } else if key.starts(with: "//") {
-                lines.append(key)
-            } else {
-                var value = translation.value
-                value = value.replacingOccurrences(of: "\r", with: "\\r")
-                value = value.replacingOccurrences(of: "\n", with: "\\n")
-                lines.append("\"\(key)\" = \"\(value)\";")
-            }
-        }
-        
-        let fileGenerator = FileGenerator(filename: filename, ext: .strings, fileHeader: getFileHeader(additionalLines: additionalLines), lines: lines)
-        try fileGenerator.generate(atPath: "\(output)/\(locale.id)\(Extension.lproj.rawValue)")
+        let folder = "\(command.output)/\(locale.id)\(Extension.lproj.rawValue)"
+        try generateFile(templateName: "localizable", folder: folder, filename: "Localizable", fileExtension: .strings, additionalContext: [
+            "flag": locale.flag,
+            "localizables": translations
+        ])
     }
     
     private func createSwiftFile(keys: [String]) throws {
-        let filename = "SwiftyStrings"
-        let path = "\(output)"
-        
-        var lines = [
-            "",
-            "import Foundation",
-            "",
-            "extension \(CommandLineTool.name) {",
-            "\tclass Strings {"
-        ]
-        
-        for key in keys where !key.isEmpty {
-            if key.starts(with: "//") {
-                lines.append("\(String(repeating: "\t", count: 2))\(key.replacingOccurrences(of: "//", with: "// MARK: -"))")
-            } else {
-                lines.append(contentsOf: [
-                    "\(String(repeating: "\t", count: 2))static var \(key): String {",
-                    "\(String(repeating: "\t", count: 3))return NSLocalizedString(\"\(key)\", comment: \"\")",
-                    "\(String(repeating: "\t", count: 2))}",
-                    ""
-                ])
-            }
-        }
-        
-        lines.append(contentsOf: [
-            "\t}",
-            "}"
+        try generateFile(templateName: "strings", filename: "SwiftyStrings", fileExtension: .strings, additionalContext: [
+            "localizables": keys
         ])
-        
-        let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
-        try fileGenerator.generate(atPath: path)
     }
 }

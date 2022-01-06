@@ -6,29 +6,22 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 import Stencil
 import PathKit
 
-class FontsGenerator: AssetsGenerator {
+class FontsGenerator: AssetsGenerator<FontsCommand> {
     // MARK: - Properties
-    private var fontFamilies = [FontFamily]()
-    private var plistPath: String?
+    let fontFamilies: [FontFamily]
     
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, command: FontsCommand, underTest: Bool = false) throws {
-        try super.init(result: result, assetsCommand: command, underTest: underTest)
-        
-        plistPath = result.get(command.plistOption)
-        parseFonts()
-    }
-    
-    // MARK: - Parsing
-    private func parseFonts() {
-        guard let parser = try? FontsParser(path: input) else {
-            return
+    override init?(command: FontsCommand, underTest: Bool = false) throws {
+        guard let parser = try? FontsParser(path: command.input) else {
+            return nil
         }
         fontFamilies = parser.fontFamilies
+        
+        try super.init(command: command, underTest: underTest)
     }
     
     // MARK: - Generation
@@ -40,13 +33,13 @@ class FontsGenerator: AssetsGenerator {
     }
     
     private func createSwiftFile(fonts: [FontFamily]) throws {
-        try generateSwiftFile(templateName: "fonts", filename: "SwiftyFonts", additionalContext: [
+        try generateFile(templateName: "fonts", filename: "SwiftyFonts", additionalContext: [
             "fontFamilies": fonts
         ])
     }
 
     private func addFontsToPList(fonts: [Font]) throws {
-        guard let path = plistPath else { return }
+        guard let path = command.plist else { return }
 
         let plistService = PlistService(path: path)
 

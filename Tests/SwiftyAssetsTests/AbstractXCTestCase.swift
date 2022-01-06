@@ -11,19 +11,23 @@ import class Foundation.Bundle
 
 class AbstractXCTestCase: XCTestCase {
     var testsDirectory: URL {
-        return URL(fileURLWithPath: #file).deletingLastPathComponent()
+        URL(fileURLWithPath: #file).deletingLastPathComponent()
     }
 
     var resourcesDirectory: URL {
-        return testsDirectory.appendingPathComponent("Resources")
+        testsDirectory.appendingPathComponent("Resources")
+    }
+    
+    var generatedDirectory: URL {
+        testsDirectory.appendingPathComponent("Generated")
     }
 
     func getResourceURL(path: String, ext: Extension) -> URL {
-        return resourcesDirectory.appendingPathComponent(path).appendingPathExtension(ext.withoutDot)
+        resourcesDirectory.appendingPathComponent(path).appendingPathExtension(ext.withoutDot)
     }
     
     func getResourceURLString(path: String, ext: Extension) -> String {
-        return resourcesDirectory
+        resourcesDirectory
             .appendingPathComponent(path)
             .appendingPathExtension(ext.withoutDot)
             .absoluteString

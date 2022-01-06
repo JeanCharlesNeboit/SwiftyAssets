@@ -14,11 +14,11 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/apple/swift-tools-support-core.git", from: "0.1.10"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.0.0"),
         .package(url: "https://github.com/swiftcsv/SwiftCSV.git", from: "0.5.5"),
         .package(url: "https://github.com/jpsim/Yams.git", from: "3.0.0"),
         .package(url: "https://github.com/stencilproject/Stencil", from: "0.14.0"),
-        .package(url: "git@github.com:JeanCharlesNeboit/SwiftyKit.git", .revision("c3cb0b1"))
+        .package(url: "git@github.com:JeanCharlesNeboit/SwiftyKit.git", .branch("main"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -26,7 +26,7 @@ let package = Package(
         .target(
             name: "SwiftyAssets",
             dependencies: [
-                "SwiftToolsSupport-auto",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "SwiftCSV",
                 "Yams",
                 "Stencil",

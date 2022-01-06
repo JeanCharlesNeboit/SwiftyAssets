@@ -6,55 +6,45 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 
-public class AssetsCommand {
-    let subparser: ArgumentParser
-    let inputPositional: PositionalArgument<String>
-    let outputPositional: PositionalArgument<String>
+struct ProjectOptions: ParsableArguments {
+    // MARK: - Properties
+    @Option(name: .customLong("project-name"), help: "The name of the project.")
+    var name: String?
     
-    var projectNamePositional: OptionArgument<String>?
-    var copyrightPositional: OptionArgument<String>?
+    @Option(name: .shortAndLong, help: "The copyright of the project.")
+    var copyright: String?
     
-    init(parser: ArgumentParser, command: String, overview: String) {
-        subparser = parser.add(subparser: command, overview: overview)
-        
-        let input = Positional.input(command)
-        inputPositional = subparser.add(positional: input.value, kind: String.self, usage: input.usage)
-        
-        let output = Positional.output(command)
-        outputPositional = subparser.add(positional: output.value, kind: String.self, usage: output.usage)
-        
-        projectNamePositional = subparser.addOption(option: .projectName)
-        copyrightPositional = subparser.addOption(option: .copyright)
-    }
-}
+    var fullCopyright: String {
+        if let copyright = copyright {
+            return copyright
+        } else {
+            var defaultCopyright = "Copyright © \(DateFormatter(format: "yyyy").string(from: Date()))"
 
-extension AssetsCommand {
-    func projectName(in result: ArgumentParser.Result) -> String? {
-        guard let projectName = projectNamePositional else {
-            return nil
-        }
-        return result.get(projectName)
-    }
-
-    func copyright(in result: ArgumentParser.Result) -> String {
-        var defaultCopyright = "Copyright © \(DateFormatter(format: "yyyy").string(from: Date()))"
-        
-        if let projectName = projectName(in: result) {
-            defaultCopyright.append(contentsOf: ", \(projectName)")
-        }
-        defaultCopyright.append(contentsOf: ". All rights reserved.")
-        
-        guard let copyright = copyrightPositional else {
+            if let name = name {
+                defaultCopyright.append(contentsOf: ", \(name)")
+            }
+            defaultCopyright.append(contentsOf: ". All rights reserved.")
+            
             return defaultCopyright
         }
-        
-        return result.get(copyright) ?? defaultCopyright
-    }
-    
-    func getInputFileType(in result: ArgumentParser.Result, for option: OptionArgument<String>?) -> String? {
-        guard let option = option else { return nil }
-        return result.get(option)
     }
 }
+
+struct PathArguments: ParsableArguments {
+    
+}
+
+protocol AssetsCommand: ParsableCommand {
+    var input: String { get }
+    var output: String { get }
+    var projectOptions: ProjectOptions { get }
+}
+
+//extension AssetsCommand {    
+//    func getInputFileType(in result: ArgumentParser.Result, for option: OptionArgument<String>?) -> String? {
+//        guard let option = option else { return nil }
+//        return result.get(option)
+//    }
+//}

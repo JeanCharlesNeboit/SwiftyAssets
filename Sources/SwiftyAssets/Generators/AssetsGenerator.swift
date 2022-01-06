@@ -6,88 +6,50 @@
 //
 
 import Foundation
-import TSCUtility
+import ArgumentParser
 import Stencil
 import PathKit
 
-class AssetsGenerator {
+class AssetsGenerator<T: AssetsCommand> {
     // MARK: - Properties
-    let result: ArgumentParser.Result
-    let command: AssetsCommand
+    let command: T
     let underTest: Bool
-    let input: String
-    let output: String
     
     private(set) var generatedFileContent = ""
     
-    var projectName: String {
-        command.projectName(in: result) ?? ""
-    }
-    
-    var copyright: String {
-        command.copyright(in: result)
-    }
-    
     // MARK: - Initialization
-    init?(result: ArgumentParser.Result, assetsCommand: AssetsCommand, underTest: Bool) throws {
-        guard let inputArg = result.get(assetsCommand.inputPositional) else {
-            return nil
-        }
-
-        guard let outputArg = result.get(assetsCommand.outputPositional) else {
-            return nil
-        }
+    init?(command: T, underTest: Bool) throws {
+        self.command = command
+        self.underTest = underTest
 
         var isDir: ObjCBool = true
-        if !FileManager.default.fileExists(atPath: outputArg, isDirectory: &isDir) {
-            try FileManager.default.createDirectory(atPath: outputArg, withIntermediateDirectories: true, attributes: nil)
+        if !FileManager.default.fileExists(atPath: command.output, isDirectory: &isDir) {
+            try FileManager.default.createDirectory(atPath: command.output, withIntermediateDirectories: true, attributes: nil)
         }
-        
-        self.result = result
-        self.command = assetsCommand
-        self.underTest = underTest
-        self.input = inputArg
-        self.output = outputArg
     }
     
     // MARK: -
     func getFileHeader(additionalLines: [String]? = nil) -> FileHeader {
-        return FileHeader(projectName: projectName, copyright: copyright, additionalLines: additionalLines)
-    }
-    
-    public func createAssetsClassFile() throws {
-        let filename = "\(CommandLineTool.name)"
-        let path = "\(output)"
-        
-        let lines = [
-            "",
-            "import Foundation",
-            "",
-            "class \(filename) {",
-            "}"
-        ]
-        
-        let fileGenerator = FileGenerator(filename: filename, ext: .swift, fileHeader: getFileHeader(), lines: lines)
-        try fileGenerator.generate(atPath: path, overwrite: false)
+        return FileHeader(projectName: command.projectOptions.name, copyright: command.projectOptions.fullCopyright, additionalLines: additionalLines)
     }
     
     func generate() throws {
-        try createAssetsClassFile()
+        try generateFile(templateName: "swifty", filename: CLI.name, fileExtension: .swift, additionalContext: [:])
     }
     
     // MARK: -
     #warning("Create protocol and call generateSwiftFile directly in generate")
-    func generateSwiftFile(templateName: String, filename: String, additionalContext: [String: Any]) throws {
+    func generateFile(templateName: String, folder: String? = nil, filename: String, fileExtension: Extension = .swift, additionalContext: [String: Any]) throws {
         var context: [String: Any] = [
-            "projectName": projectName,
+            "projectName": command.projectOptions.name ?? "",
             "date": DateFormatter(format: "dd/MM/yyyy").string(from: Date()),
-            "copyright": copyright
+            "copyright": command.projectOptions.fullCopyright
         ]
         context += additionalContext
         generatedFileContent = Environment.getContent(templateName: templateName, context: context)
         
         if !underTest {
-            FileGenerator.generate(atPath: output, filename: filename, ext: .swift, content: generatedFileContent)
+            FileGenerator.generate(atPath: folder ?? command.output, filename: filename, fileExtension: fileExtension, content: generatedFileContent)
         }
     }
 }

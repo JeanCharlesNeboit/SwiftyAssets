@@ -8,7 +8,6 @@
 import Foundation
 
 import XCTest
-import TSCUtility
 @testable import SwiftyAssets
 
 final class FontsGeneratorTests: AbstractXCTestCase {
@@ -18,19 +17,20 @@ final class FontsGeneratorTests: AbstractXCTestCase {
     // MARK: - Lifecycle
     override func setUp() {
         super.setUp()
-        
-        var commandRegistry = CommandRegistry(usage: CommandLineTool.usage, overview: CommandLineTool.overview)
-        commandRegistry.register(command: FontsCommand.self)
-        let parser = commandRegistry.parser
-        
         let input = resourcesDirectory.appendingPathComponent("Fonts/apple_garamond", isDirectory: true).path
-        let result = try! parser.parse(["fonts", input, "output ."])
-        
-        sut = try! FontsGenerator(result: result, command: .init(parser: parser))
+        sut = try? FontsGenerator(command: .parse([input, "."]), underTest: true)
     }
     
     // MARK: - Tests
     func testColorsGeneration() {
+        // Given
+        
+        // When
         try! sut.generate()
+        
+        // Expect
+        XCTAssertEqual(sut.fontFamilies.count, 2)
+        XCTAssertEqual(sut.fontFamilies.first(where: { $0.name == "AppleGaramond"})?.fonts.count, 4)
+        XCTAssertEqual(sut.fontFamilies.first(where: { $0.name == "AppleGaramondLight"})?.fonts.count, 2)
     }
 }

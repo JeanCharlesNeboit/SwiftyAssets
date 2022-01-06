@@ -29,12 +29,12 @@
         }
       },
       {
-        "package": "swift-tools-support-core",
-        "repositoryURL": "https://github.com/apple/swift-tools-support-core.git",
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
         "state": {
           "branch": null,
-          "revision": "f39fc6c12266697b1585589090f0004903974685",
-          "version": "0.1.10"
+          "revision": "e1465042f195f374b94f915ba8ca49de24300a0d",
+          "version": "1.0.2"
         }
       },
       {
@@ -50,8 +50,8 @@
         "package": "SwiftyKit",
         "repositoryURL": "git@github.com:JeanCharlesNeboit/SwiftyKit.git",
         "state": {
-          "branch": "c3cb0b1",
-          "revision": "c3cb0b1452fb557cab403c64be72faa631a55667",
+          "branch": "main",
+          "revision": "bc6106b5b5072ff555da7cca0e6738ce4f7f2c4e",
           "version": null
         }
       },
