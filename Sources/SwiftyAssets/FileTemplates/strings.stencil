@@ -20,5 +20,17 @@ extension SwiftyAssets {
         {% endif %}
         {% endfor %}
         {% endfilter %}
+        
+        {% filter removeExtraNewLines %}
+        {% for localizableWithFormat in localizablesWithFormat %}
+        static func {{ localizableWithFormat }}(count: Int) -> String {
+            let formatString = NSLocalizedString("{{ localizableWithFormat }}", comment: "")
+            return String.localizedStringWithFormat(formatString, count)
+        }
+        {% ifnot forloop.last %}
+        {% removeExtraNewLinesForceNewLine %}
+        {% endif %}
+        {% endfor %}
+        {% endfilter %}
     }
 }

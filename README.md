@@ -50,6 +50,8 @@ SUBCOMMANDS:
 ```
 
 ### **Generate Localizable Strings**
+https://unicode-org.github.io/cldr-staging/charts/latest/supplemental/language_plural_rules.html
+
 #### *Show the help*
 `SwiftyAssets strings --help`
 

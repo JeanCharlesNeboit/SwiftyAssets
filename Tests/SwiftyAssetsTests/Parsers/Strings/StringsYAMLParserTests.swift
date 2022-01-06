@@ -19,9 +19,9 @@ final class StringsYAMLParserTests: AbstractXCTestCase {
         do {
             sleep(1)
             let sut = try StringsYAMLParser(path: cleanFile.path)
-            let sortedLocalizableStrings = sut.localizableStrings.sorted( by: { $0.0 < $1.0 })
+            let sortedLocalizableStrings = sut.localizables.sorted( by: { $0.0 < $1.0 })
 
-            XCTAssertEqual(sut.localizableStrings.count, 2)
+            XCTAssertEqual(sut.localizables.count, 2)
             sortedLocalizableStrings.enumerated().forEach { iterator1 in
                 let key = iterator1.element.key
                 let translations = iterator1.element.value.sorted()

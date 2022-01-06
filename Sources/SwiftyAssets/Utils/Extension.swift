@@ -10,6 +10,7 @@ import Foundation
 enum Extension: String {
     case swift = ".swift"
     case strings = ".strings"
+    case stringsdict = ".stringsdict"
     case xcassets = ".xcassets"
     case json = ".json"
     case lproj = ".lproj"

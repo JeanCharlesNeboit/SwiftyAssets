@@ -11,8 +11,8 @@ import SwiftCSV
 
 class StringsGenerator: AssetsGenerator<StringsCommand> {
     // MARK: - Properties
-    private var localizableStrings = LocalizableStrings()
     private var inputFileType: InputFileType = .yaml
+    private var stringsParser: StringsParser?
     
     // MARK: - Initialization
     override init?(command: StringsCommand, underTest: Bool = false) throws {
@@ -29,7 +29,7 @@ class StringsGenerator: AssetsGenerator<StringsCommand> {
         switch inputFileType {
         case .yaml:
             if let yamlParser = try? StringsYAMLParser(path: command.input) {
-                self.localizableStrings = yamlParser.localizableStrings
+                stringsParser = yamlParser
             }
         case .csv:
             #warning("ToDo")
@@ -43,25 +43,45 @@ class StringsGenerator: AssetsGenerator<StringsCommand> {
     override func generate() throws {
         try super.generate()
         
-        try localizableStrings.forEach { localizable in
-            try createLocalizableFolders(locale: localizable.key, translations: localizable.value)
+        guard let stringsParser = stringsParser else { return }
+
+        try stringsParser.localizables.forEach { localizable in
+            try createLocalizables(locale: localizable.key, localizables: localizable.value)
         }
-        
-        let keys = Array(Set(localizableStrings.map { $0.value }.reduce([], +).map { $0.key }))
-        try createSwiftFile(keys: keys)
+
+        try stringsParser.localizableWithFormat.forEach { localizable in
+            try createLocalizablesWithFormat(locale: localizable.key, localizables: localizable.value)
+        }
+
+        let localizablesKeys = Array(Set(stringsParser.localizables.map { $0.value }.reduce([], +).map { $0.key }))
+        let localizablesWithFormatKeys = Array(Set(stringsParser.localizableWithFormat.map { $0.value }.reduce([], +).map { $0.key }))
+        try createSwiftFile(localizablesKeys: localizablesKeys, localizablesWithFormatKeys: localizablesWithFormatKeys)
     }
     
-    private func createLocalizableFolders(locale: Locale, translations: [Translation]) throws {
-        let folder = "\(command.output)/\(locale.id)\(Extension.lproj.rawValue)"
+    private func folder(for locale: Locale) -> String {
+        "\(command.output)/\(locale.id)\(Extension.lproj.rawValue)"
+    }
+    
+    private func createLocalizables(locale: Locale, localizables: [Localizable]) throws {
+        let folder = folder(for: locale)
         try generateFile(templateName: "localizable", folder: folder, filename: "Localizable", fileExtension: .strings, additionalContext: [
             "flag": locale.flag,
-            "localizables": translations
+            "localizables": localizables
         ])
     }
     
-    private func createSwiftFile(keys: [String]) throws {
-        try generateFile(templateName: "strings", filename: "SwiftyStrings", fileExtension: .strings, additionalContext: [
-            "localizables": keys
+    private func createLocalizablesWithFormat(locale: Locale, localizables: [LocalizableWithFormat]) throws {
+        let folder = folder(for: locale)
+        try generateFile(templateName: "localizable_plurals", folder: folder, filename: "Localizable", fileExtension: .stringsdict, additionalContext: [
+            "localizables": localizables
         ])
+    }
+    
+    private func createSwiftFile(localizablesKeys: [String], localizablesWithFormatKeys: [String]) throws {
+        try generateFile(templateName: "strings", filename: "SwiftyStrings", fileExtension: .swift, additionalContext: [
+            "localizables": localizablesKeys,
+            "localizablesWithFormat": localizablesWithFormatKeys
+        ])
+        
     }
 }

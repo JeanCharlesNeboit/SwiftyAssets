@@ -7,10 +7,17 @@
 
 import Foundation
 
-typealias LocalizableStrings = [Locale: [Translation]]
+typealias Localizables = [Locale: [Localizable]]
+typealias LocalizablesWithFormat = [Locale: [LocalizableWithFormat]]
 
-class StringsYAMLParser: YAMLParser {
-    private(set) var localizableStrings: LocalizableStrings = [:]
+protocol StringsParser {
+    var localizables: Localizables { get }
+    var localizableWithFormat: LocalizablesWithFormat { get }
+}
+
+class StringsYAMLParser: YAMLParser, StringsParser {
+    private(set) var localizables = Localizables()
+    private(set) var localizableWithFormat = LocalizablesWithFormat()
     
     override init(path: String) throws {
         try super.init(path: path)
@@ -18,8 +25,21 @@ class StringsYAMLParser: YAMLParser {
         loadedDictionary.keys.forEach { key in
             if let values = loadedDictionary[key] as? [String: Any] {
                 values.keys.forEach { language in
-                    let value = values[language] as? String ?? ""
-                    (localizableStrings[Locale(id: language), default: []]).append(Translation(key: key, value: value))
+                    let locale = Locale(id: language)
+                    let values = values[language]
+                    
+                    if let value = values as? String {
+                        (localizables[locale, default: []]).append(.init(key: key, value: value))
+                    } else if let plurals = values as? [String: String] {
+                        guard plurals.keys.contains(PluralRuleValue.other()) else {
+                            LoggerService.shared.error(message: "Plural rules must at least contain 'other' key.")
+                            return
+                        }
+                        
+                        (localizableWithFormat[locale, default: []]).append(.init(key: key, value: plurals))
+                    } else {
+                        LoggerService.shared.error(message: "Wrong syntax for '\(key)' string key in \(language) \(locale.flag)")
+                    }
                 }
             }
         }

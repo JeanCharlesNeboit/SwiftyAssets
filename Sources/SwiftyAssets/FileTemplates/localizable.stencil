@@ -9,6 +9,6 @@
 
 {% filter removeExtraNewLines %}
 {% for localizable in localizables %}
-"{{ localizable.key }}" = "{{ localizable.value }}"
+"{{ localizable.key }}" = "{{ localizable.value }}";
 {% endfor %}
 {% endfilter %}
