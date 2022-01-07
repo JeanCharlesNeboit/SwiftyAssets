@@ -13,7 +13,7 @@
                 <key>NSStringFormatSpecTypeKey</key>
                 <string>NSStringPluralRuleType</string>
                 <key>NSStringFormatValueTypeKey</key>
-                <string>d</string>
+                <string>{{ localizable.type }}</string>
                 {% filter removeExtraNewLines %}
                 {% for key, value in localizable.value %}
                 <key>{{ key }}</key>

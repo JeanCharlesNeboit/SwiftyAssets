@@ -14,6 +14,7 @@ struct Localizable {
 
 struct LocalizableWithFormat {
     let key: String
+    let type: String
     let value: [String: String]
 }
 

@@ -46,15 +46,17 @@ class StringsGenerator: AssetsGenerator<StringsCommand> {
         guard let stringsParser = stringsParser else { return }
 
         try stringsParser.localizables.forEach { localizable in
-            try createLocalizables(locale: localizable.key, localizables: localizable.value)
+            let values = localizable.value.sorted(by: { $0.key < $1.key })
+            try createLocalizables(locale: localizable.key, localizables: values)
         }
 
         try stringsParser.localizableWithFormat.forEach { localizable in
-            try createLocalizablesWithFormat(locale: localizable.key, localizables: localizable.value)
+            let values = localizable.value.sorted(by: { $0.key < $1.key })
+            try createLocalizablesWithFormat(locale: localizable.key, localizables: values)
         }
 
-        let localizablesKeys = Array(Set(stringsParser.localizables.map { $0.value }.reduce([], +).map { $0.key }))
-        let localizablesWithFormatKeys = Array(Set(stringsParser.localizableWithFormat.map { $0.value }.reduce([], +).map { $0.key }))
+        let localizablesKeys = Array(Set(stringsParser.localizables.map { $0.value }.reduce([], +).map { $0.key })).sorted()
+        let localizablesWithFormatKeys = Array(Set(stringsParser.localizableWithFormat.map { $0.value }.reduce([], +).map { $0.key })).sorted()
         try createSwiftFile(localizablesKeys: localizablesKeys, localizablesWithFormatKeys: localizablesWithFormatKeys)
     }
     

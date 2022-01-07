@@ -30,13 +30,15 @@ class StringsYAMLParser: YAMLParser, StringsParser {
                     
                     if let value = values as? String {
                         (localizables[locale, default: []]).append(.init(key: key, value: value))
-                    } else if let plurals = values as? [String: String] {
+                    } else if var plurals = values as? [String: String] {
                         guard plurals.keys.contains(PluralRuleValue.other()) else {
                             LoggerService.shared.error(message: "Plural rules must at least contain 'other' key.")
                             return
                         }
                         
-                        (localizableWithFormat[locale, default: []]).append(.init(key: key, value: plurals))
+                        let type = plurals["type"] ?? "d"
+                        plurals.removeValue(forKey: "type")
+                        (localizableWithFormat[locale, default: []]).append(.init(key: key, type: type, value: plurals))
                     } else {
                         LoggerService.shared.error(message: "Wrong syntax for '\(key)' string key in \(language) \(locale.flag)")
                     }
