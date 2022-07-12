@@ -8,6 +8,7 @@
 import Foundation
 
 extension Process {
+    @discardableResult
     static func shell(launchPath: String, arguments: [String]) -> String {
         let task = Process()
         let pipe = Pipe()
